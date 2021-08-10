@@ -1,4 +1,4 @@
-package com.helloworldmessenger.helloworld;
+package com.messengerhelloworld.helloworld;
 
 import org.junit.Test;
 

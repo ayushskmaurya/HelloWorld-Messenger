@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/nav_chats"
-        android:name="com.helloworldmessenger.helloworld.ui.chats.ChatsFragment"
+        android:name="com.messengerhelloworld.helloworld.ui.chats.ChatsFragment"
         android:label="@string/menu_chats"
         tools:layout="@layout/fragment_chats" />
 
     <fragment
         android:id="@+id/nav_contacts"
-        android:name="com.helloworldmessenger.helloworld.ui.contacts.ContactsFragment"
+        android:name="com.messengerhelloworld.helloworld.ui.contacts.ContactsFragment"
         android:label="@string/menu_contacts"
         tools:layout="@layout/fragment_contacts" />
 </navigation>

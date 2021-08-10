@@ -1,4 +1,4 @@
-package com.helloworldmessenger.helloworld.ui.chats;
+package com.messengerhelloworld.helloworld.ui.chats;
 
 import androidx.lifecycle.ViewModel;
 

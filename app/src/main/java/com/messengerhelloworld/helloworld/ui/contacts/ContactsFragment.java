@@ -1,4 +1,4 @@
-package com.helloworldmessenger.helloworld.ui.contacts;
+package com.messengerhelloworld.helloworld.ui.contacts;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.helloworldmessenger.helloworld.R;
+import com.messengerhelloworld.helloworld.R;
 
 public class ContactsFragment extends Fragment {
 

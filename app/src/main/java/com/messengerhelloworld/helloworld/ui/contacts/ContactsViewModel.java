@@ -1,4 +1,4 @@
-package com.helloworldmessenger.helloworld.ui.contacts;
+package com.messengerhelloworld.helloworld.ui.contacts;
 
 import androidx.lifecycle.ViewModel;
 

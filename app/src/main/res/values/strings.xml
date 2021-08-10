@@ -15,6 +15,9 @@
     <string name="login">Login</string>
     <string name="reg">Register</string>
 
+    <string name="sendOtp">OTP</string>
+    <string name="verify">Verify</string>
+
     <string name="menu_chats">Chats</string>
     <string name="menu_contacts">Contacts</string>
 </resources>

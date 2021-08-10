@@ -1,4 +1,4 @@
-package com.helloworldmessenger.helloworld;
+package com.messengerhelloworld.helloworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 

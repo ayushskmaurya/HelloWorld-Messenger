@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.helloworldmessenger.helloworld">
+    package="com.messengerhelloworld.helloworld">
 
     <application
         android:allowBackup="true"
@@ -23,11 +23,17 @@
         <activity
             android:name=".RegisterActivity"
             android:label="Register"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".LoginActivity">
-        </activity>
-        <activity android:name=".MainActivity"
+            android:parentActivityName=".LoginActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OtpRegisterActivity"
+            android:label="OTP Verification"
+            android:parentActivityName=".RegisterActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>
