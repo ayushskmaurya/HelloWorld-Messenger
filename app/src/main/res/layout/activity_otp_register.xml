@@ -46,6 +46,16 @@
             android:textCursorDrawable="@drawable/cursor_color"
             android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/resend_otpActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black1"
+            android:textSize="14sp" />
+
         <Button
             android:id="@+id/verify_otpActivity"
             android:layout_width="match_parent"

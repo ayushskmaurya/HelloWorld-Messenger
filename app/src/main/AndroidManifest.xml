@@ -27,7 +27,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.HelloWorld.NoActionBar" />
         <activity
             android:name=".OtpRegisterActivity"
             android:label="OTP Verification"

@@ -1,7 +1,9 @@
 package com.messengerhelloworld.helloworld;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,17 +15,18 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
-public class SendOTP {
+public class OtpVerification {
+	private final FirebaseAuth mAuth;
 	private final Activity activity;
 	private String verification_id;
 
-	public SendOTP(Activity activity) {
+	public OtpVerification(Activity activity) {
+		this.mAuth = FirebaseAuth.getInstance();
 		this.activity = activity;
 		this.verification_id = null;
 	}
 
 	public void sendOtp(String mob) {
-		FirebaseAuth mAuth = FirebaseAuth.getInstance();
 		PhoneAuthOptions options =
 			PhoneAuthOptions.newBuilder(mAuth)
 				.setPhoneNumber("+91" + mob)
@@ -52,7 +55,21 @@ public class SendOTP {
 		PhoneAuthProvider.verifyPhoneNumber(options);
 	}
 
-	public String getVerificationId() {
-		return verification_id;
+	public void verifyOtp(String enteredOtp, Class<?> destClass) {
+		if(verification_id != null) {
+			PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verification_id, enteredOtp);
+			mAuth.signInWithCredential(credential)
+				.addOnCompleteListener(activity, task -> {
+					if(task.isSuccessful()) {
+						Intent intent = new Intent(activity, destClass);
+						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+						activity.startActivity(intent);
+					}
+					else
+						Toast.makeText(activity, "You have entered Wrong OTP.", Toast.LENGTH_SHORT).show();
+				});
+		}
+		else
+			Toast.makeText(activity, "Please enter the valid OTP.", Toast.LENGTH_SHORT).show();
 	}
 }
