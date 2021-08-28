@@ -43,7 +43,7 @@ public class OtpRegisterActivity extends AppCompatActivity {
 			if(!isNumeric(enteredOtp) || enteredOtp.length() != 6)
 				Toast.makeText(this, "Please enter the valid OTP.", Toast.LENGTH_SHORT).show();
 			else
-				otpVerification.verifyOtp(enteredOtp, MainActivity.class);
+				otpVerification.verifyOtp(enteredOtp, "register");
 		});
 
 //		String name = intent.getStringExtra("registeredName");

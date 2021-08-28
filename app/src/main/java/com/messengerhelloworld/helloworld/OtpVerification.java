@@ -1,7 +1,6 @@
 package com.messengerhelloworld.helloworld;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,34 +35,33 @@ public class OtpVerification {
 
 					@Override
 					public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-						Log.d("HelloWorld", "Verification Completed");
+						Log.i("HelloWorld", "Verification Completed");
 					}
 
 					@Override
 					public void onVerificationFailed(@NonNull FirebaseException e) {
-						Log.d("HelloWorld", "Verification Failed");
+						Log.i("HelloWorld", "Verification Failed");
 					}
 
 					@Override
 					public void onCodeSent(@NonNull String verificationId,
 										   @NonNull PhoneAuthProvider.ForceResendingToken token) {
 						verification_id = verificationId;
-						Log.d("HelloWorld", "Code Sent");
+						Log.i("HelloWorld", "Code Sent");
 					}
 				})
 				.build();
 		PhoneAuthProvider.verifyPhoneNumber(options);
 	}
 
-	public void verifyOtp(String enteredOtp, Class<?> destClass) {
+	public void verifyOtp(String enteredOtp, String whatToDo) {
 		if(verification_id != null) {
 			PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verification_id, enteredOtp);
 			mAuth.signInWithCredential(credential)
 				.addOnCompleteListener(activity, task -> {
 					if(task.isSuccessful()) {
-						Intent intent = new Intent(activity, destClass);
-						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-						activity.startActivity(intent);
+						AfterOtpIsVerified afterOtpIsVerified = new AfterOtpIsVerified(activity);
+						afterOtpIsVerified.whatToDoAfterVerificationSuccess(whatToDo);
 					}
 					else
 						Toast.makeText(activity, "You have entered Wrong OTP.", Toast.LENGTH_SHORT).show();
