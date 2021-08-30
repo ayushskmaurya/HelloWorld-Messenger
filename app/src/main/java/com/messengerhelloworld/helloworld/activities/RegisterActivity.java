@@ -1,4 +1,4 @@
-package com.messengerhelloworld.helloworld;
+package com.messengerhelloworld.helloworld.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.messengerhelloworld.helloworld.R;
+import com.messengerhelloworld.helloworld.utils.SHA256Hash;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -29,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 			if(name.length() == 0)
 				Toast.makeText(this, "Please enter the valid Name.", Toast.LENGTH_SHORT).show();
-			else if(!isNumeric(mob) || mob.length() != 10)
+			else if(!mob.matches("^[0-9]{10}$"))
 				Toast.makeText(this, "Please enter valid Mobile No.", Toast.LENGTH_SHORT).show();
 			else if(pwd.length() == 0)
 				Toast.makeText(this, "Please enter the Password.", Toast.LENGTH_SHORT).show();
@@ -51,15 +54,5 @@ public class RegisterActivity extends AppCompatActivity {
 				}
 			}
 		});
-	}
-
-	public static boolean isNumeric(String num) {
-		try {
-			Double.parseDouble(num);
-			return true;
-		}
-		catch(Exception e) {
-			return false;
-		}
 	}
 }

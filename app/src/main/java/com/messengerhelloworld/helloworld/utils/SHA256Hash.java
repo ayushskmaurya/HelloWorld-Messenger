@@ -1,4 +1,4 @@
-package com.messengerhelloworld.helloworld;
+package com.messengerhelloworld.helloworld.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

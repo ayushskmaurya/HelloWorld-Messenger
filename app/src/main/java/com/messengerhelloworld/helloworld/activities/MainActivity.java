@@ -1,4 +1,4 @@
-package com.messengerhelloworld.helloworld;
+package com.messengerhelloworld.helloworld.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.messengerhelloworld.helloworld.databinding.ActivityMainBinding;
+import com.messengerhelloworld.helloworld.R;
 
 public class MainActivity extends AppCompatActivity {
 

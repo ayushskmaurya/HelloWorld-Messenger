@@ -1,4 +1,4 @@
-package com.messengerhelloworld.helloworld;
+package com.messengerhelloworld.helloworld.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.messengerhelloworld.helloworld.R;
+import com.messengerhelloworld.helloworld.utils.OtpVerification;
+
 public class OtpRegisterActivity extends AppCompatActivity {
 	private OtpVerification otpVerification;
 	private TextView resendOtp;
@@ -21,8 +24,8 @@ public class OtpRegisterActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_otp_register);
 
-		Intent intent = getIntent();
-		String mob = intent.getStringExtra("registeredMob");
+		Intent intent1 = getIntent();
+		String mob = intent1.getStringExtra("registeredMob");
 
 		resendOtp = findViewById(R.id.resend_otpActivity);
 		startTimer(mob);
@@ -40,14 +43,18 @@ public class OtpRegisterActivity extends AppCompatActivity {
 		Button verify = findViewById(R.id.verify_otpActivity);
 		verify.setOnClickListener(v -> {
 			String enteredOtp = enteredOtpView.getText().toString().trim();
-			if(!isNumeric(enteredOtp) || enteredOtp.length() != 6)
+			if(!enteredOtp.matches("^[0-9]{6}$"))
 				Toast.makeText(this, "Please enter the valid OTP.", Toast.LENGTH_SHORT).show();
 			else
-				otpVerification.verifyOtp(enteredOtp, "register");
+				otpVerification.verifyOtp(enteredOtp, () -> {
+					Intent intent2 = new Intent(this, MainActivity.class);
+					intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+					startActivity(intent2);
+				});
 		});
 
-//		String name = intent.getStringExtra("registeredName");
-//		String hash = intent.getStringExtra("registeredPasswordHash");
+//		String name = intent1.getStringExtra("registeredName");
+//		String hash = intent1.getStringExtra("registeredPasswordHash");
 	}
 
 	private void startTimer(String mob) {
@@ -73,15 +80,5 @@ public class OtpRegisterActivity extends AppCompatActivity {
 				});
 			}
 		}.start();
-	}
-
-	public static boolean isNumeric(String num) {
-		try {
-			Double.parseDouble(num);
-			return true;
-		}
-		catch(Exception e) {
-			return false;
-		}
 	}
 }

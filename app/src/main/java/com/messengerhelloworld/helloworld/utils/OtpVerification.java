@@ -1,4 +1,4 @@
-package com.messengerhelloworld.helloworld;
+package com.messengerhelloworld.helloworld.utils;
 
 import android.app.Activity;
 import android.util.Log;
@@ -13,6 +13,8 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
+
+import com.messengerhelloworld.helloworld.interfaces.AfterSuccessfulOtpVerification;
 
 public class OtpVerification {
 	private final FirebaseAuth mAuth;
@@ -54,15 +56,13 @@ public class OtpVerification {
 		PhoneAuthProvider.verifyPhoneNumber(options);
 	}
 
-	public void verifyOtp(String enteredOtp, String whatToDo) {
+	public void verifyOtp(String enteredOtp, AfterSuccessfulOtpVerification afterSuccessfulOtpVerification) {
 		if(verification_id != null) {
 			PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verification_id, enteredOtp);
 			mAuth.signInWithCredential(credential)
 				.addOnCompleteListener(activity, task -> {
-					if(task.isSuccessful()) {
-						AfterOtpIsVerified afterOtpIsVerified = new AfterOtpIsVerified(activity);
-						afterOtpIsVerified.whatToDoAfterVerificationSuccess(whatToDo);
-					}
+					if(task.isSuccessful())
+						afterSuccessfulOtpVerification.execute();
 					else
 						Toast.makeText(activity, "You have entered Wrong OTP.", Toast.LENGTH_SHORT).show();
 				});

@@ -1,10 +1,12 @@
-package com.messengerhelloworld.helloworld;
+package com.messengerhelloworld.helloworld.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+
+import com.messengerhelloworld.helloworld.R;
 
 public class LoginActivity extends AppCompatActivity {
 

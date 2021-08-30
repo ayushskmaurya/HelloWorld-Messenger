@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloWorld">
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.HelloWorld.NoActionBar">
@@ -21,18 +21,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activities.RegisterActivity"
             android:label="Register"
-            android:parentActivityName=".LoginActivity"
+            android:parentActivityName=".activities.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.HelloWorld.NoActionBar" />
         <activity
-            android:name=".OtpRegisterActivity"
+            android:name=".activities.OtpRegisterActivity"
             android:label="OTP Verification"
-            android:parentActivityName=".RegisterActivity"
+            android:parentActivityName=".activities.RegisterActivity"
             android:screenOrientation="portrait">
         </activity>
     </application>
