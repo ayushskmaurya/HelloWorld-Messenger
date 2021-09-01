@@ -49,7 +49,7 @@ public class OtpVerification {
 					public void onCodeSent(@NonNull String verificationId,
 										   @NonNull PhoneAuthProvider.ForceResendingToken token) {
 						verification_id = verificationId;
-						Log.i("HelloWorld", "Code Sent");
+						Log.i("HelloWorld", "OTP Sent to the user successfully");
 					}
 				})
 				.build();

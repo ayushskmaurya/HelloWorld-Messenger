@@ -3,7 +3,9 @@ package com.messengerhelloworld.helloworld.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -14,10 +16,15 @@ import android.widget.Toast;
 
 import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.utils.OtpVerification;
+import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
+import com.messengerhelloworld.helloworld.interfaces.AfterStringResponseIsReceived;
+
+import java.util.HashMap;
 
 public class OtpRegisterActivity extends AppCompatActivity {
 	private OtpVerification otpVerification;
 	private TextView resendOtp;
+	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +54,37 @@ public class OtpRegisterActivity extends AppCompatActivity {
 				Toast.makeText(this, "Please enter the valid OTP.", Toast.LENGTH_SHORT).show();
 			else
 				otpVerification.verifyOtp(enteredOtp, () -> {
-					Intent intent2 = new Intent(this, MainActivity.class);
-					intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-					startActivity(intent2);
+					HashMap<String, String> data = new HashMap<>();
+					data.put("table_name", "users");
+					data.put("name", intent1.getStringExtra("registeredName"));
+					data.put("mobile_no", mob);
+					data.put("password", intent1.getStringExtra("registeredPasswordHash"));
+
+					databaseOperations.insert(data, new AfterStringResponseIsReceived() {
+						@Override
+						public void executeAfterResponse(String response) {
+							SharedPreferences sp = getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
+							SharedPreferences.Editor ed = sp.edit();
+							ed.putString("userId", response);
+							ed.putString("userMob", mob);
+							ed.apply();
+
+							intent1.removeExtra("registeredMob");
+							intent1.removeExtra("registeredName");
+							intent1.removeExtra("registeredPasswordHash");
+
+							Intent intent2 = new Intent(OtpRegisterActivity.this, MainActivity.class);
+							intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+							startActivity(intent2);
+						}
+
+						@Override
+						public void executeAfterErrorResponse() {
+							Toast.makeText(OtpRegisterActivity.this, "Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+						}
+					});
 				});
 		});
-
-//		String name = intent1.getStringExtra("registeredName");
-//		String hash = intent1.getStringExtra("registeredPasswordHash");
 	}
 
 	private void startTimer(String mob) {
