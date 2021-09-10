@@ -59,9 +59,8 @@ public class RegisterActivity extends AppCompatActivity {
 							response.getJSONObject(0);
 							Toast.makeText(RegisterActivity.this, "Account with mobile no +91 " + mob + " already exists.", Toast.LENGTH_SHORT).show();
 						} catch (JSONException je) {
-							SHA256Hash sha256Hash = new SHA256Hash();
 							try {
-								String hash = sha256Hash.getHash(pwd);
+								String hash = new SHA256Hash().getHash(pwd);
 								Intent intent = new Intent(RegisterActivity.this, OtpRegisterActivity.class);
 								intent.putExtra("registeredName", name);
 								intent.putExtra("registeredMob", mob);

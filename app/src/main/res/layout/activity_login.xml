@@ -60,15 +60,6 @@
             android:textColorHint="@color/black1"
             android:textCursorDrawable="@drawable/cursor_color" />
 
-        <TextView
-            android:id="@+id/forgot_pwd_activityLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:text="@string/forgot_pwd"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-
         <Button
             android:id="@+id/login_activityLogin"
             android:layout_width="match_parent"
