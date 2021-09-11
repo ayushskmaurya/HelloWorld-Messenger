@@ -20,4 +20,5 @@
 
     <string name="menu_chats">Chats</string>
     <string name="menu_contacts">Contacts</string>
+    <string name="menu_logout">Logout</string>
 </resources>

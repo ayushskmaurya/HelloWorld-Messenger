@@ -49,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
+
+            Menu menu = navigationView.getMenu();
+            menu.findItem(R.id.menu_logout).setOnMenuItemClickListener(item -> {
+                sp.edit().clear().commit();
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                return true;
+            });
         }
     }
 
