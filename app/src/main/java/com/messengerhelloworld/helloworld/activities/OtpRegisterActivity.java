@@ -32,6 +32,7 @@ public class OtpRegisterActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_otp_register);
 
 		Intent intent1 = getIntent();
+		String name = intent1.getStringExtra("registeredName");
 		String mob = intent1.getStringExtra("registeredMob");
 
 		resendOtp = findViewById(R.id.resend_otpActivity);
@@ -56,7 +57,7 @@ public class OtpRegisterActivity extends AppCompatActivity {
 				otpVerification.verifyOtp(enteredOtp, () -> {
 					HashMap<String, String> data = new HashMap<>();
 					data.put("table_name", "users");
-					data.put("name", intent1.getStringExtra("registeredName"));
+					data.put("name", name);
 					data.put("mobile_no", mob);
 					data.put("password", intent1.getStringExtra("registeredPasswordHash"));
 
@@ -66,6 +67,7 @@ public class OtpRegisterActivity extends AppCompatActivity {
 							SharedPreferences sp = getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 							SharedPreferences.Editor ed = sp.edit();
 							ed.putString("userId", response);
+							ed.putString("userName", name);
 							ed.putString("userMob", mob);
 							ed.apply();
 

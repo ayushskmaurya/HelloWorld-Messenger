@@ -48,6 +48,30 @@ public class DatabaseOperations {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
 							} catch (JSONException e) {
+								Toast.makeText(activity, "333Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+							}
+						},
+						error -> {
+							Toast.makeText(activity, String.valueOf(error), Toast.LENGTH_SHORT).show();
+							afterJsonArrayResponseIsReceived.executeAfterErrorResponse();}
+				) {
+					@Override
+					protected Map<String, String> getParams() {
+						return data;
+					}
+				}
+		);
+	}
+
+	public void retrieveChats(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
+		Volley.newRequestQueue(activity).add(
+				new StringRequest(
+						Request.Method.POST,
+						new Base().getBASE_URL() + "/retrieveChats.php",
+						response -> {
+							try {
+								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
+							} catch (JSONException e) {
 								Toast.makeText(activity, "Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
 							}
 						},

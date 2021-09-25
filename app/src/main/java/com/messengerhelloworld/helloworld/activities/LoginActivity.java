@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 				Toast.makeText(this, "Please enter the Password.", Toast.LENGTH_SHORT).show();
 			else {
 				HashMap<String, String> data = new HashMap<>();
-				data.put("columns", "userid, password");
+				data.put("columns", "userid, name, password");
 				data.put("table_name", "users");
 				data.put("WHERE", "mobile_no='" + mob + "'");
 
@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 									SharedPreferences sp = getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 									SharedPreferences.Editor ed = sp.edit();
 									ed.putString("userId", user.getString("userid"));
+									ed.putString("userName", user.getString("name"));
 									ed.putString("userMob", mob);
 									ed.apply();
 

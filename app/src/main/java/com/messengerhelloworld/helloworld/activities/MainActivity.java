@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -49,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
+
+            View headerView = navigationView.getHeaderView(0);
+            TextView userName = headerView.findViewById(R.id.userName);
+            TextView userMobileNo = headerView.findViewById(R.id.userMobileNo);
+            userName.setText(sp.getString("userName", null));
+            userMobileNo.setText(sp.getString("userMob", null));
 
             Menu menu = navigationView.getMenu();
             menu.findItem(R.id.menu_logout).setOnMenuItemClickListener(item -> {
