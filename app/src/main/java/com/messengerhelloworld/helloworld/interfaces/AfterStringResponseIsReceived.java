@@ -2,5 +2,5 @@ package com.messengerhelloworld.helloworld.interfaces;
 
 public interface AfterStringResponseIsReceived {
 	void executeAfterResponse(String response);
-	void executeAfterErrorResponse();
+	void executeAfterErrorResponse(String error);
 }

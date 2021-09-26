@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
+	private static final String TAG = "hwLoginActivity";
 	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);
 
 	@Override
@@ -32,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
 		TextView mobView = findViewById(R.id.mob_activityLogin);
 		TextView pwdView = findViewById(R.id.pwd_activityLogin);
+		ProgressBar progressBar = findViewById(R.id.progressBar_activityLogin);
 
 		Button login = findViewById(R.id.login_activityLogin);
 		login.setOnClickListener(v -> {
@@ -43,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
 			else if(pwd.length() == 0)
 				Toast.makeText(this, "Please enter the Password.", Toast.LENGTH_SHORT).show();
 			else {
+				login.setEnabled(false);
+				progressBar.setVisibility(View.VISIBLE);
 				HashMap<String, String> data = new HashMap<>();
 				data.put("columns", "userid, name, password");
 				data.put("table_name", "users");
@@ -51,6 +58,8 @@ public class LoginActivity extends AppCompatActivity {
 				databaseOperations.retrieve(data, new AfterJsonArrayResponseIsReceived() {
 					@Override
 					public void executeAfterResponse(JSONArray response) {
+						progressBar.setVisibility(View.GONE);
+						login.setEnabled(true);
 						try {
 							JSONObject user = response.getJSONObject(0);
 							try {
@@ -71,7 +80,8 @@ public class LoginActivity extends AppCompatActivity {
 								else
 									Toast.makeText(LoginActivity.this, "You have entered incorrect password.", Toast.LENGTH_SHORT).show();
 							} catch (NoSuchAlgorithmException e) {
-								Toast.makeText(LoginActivity.this, "Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+								Log.e(TAG, e.toString());
+								Toast.makeText(LoginActivity.this, "Unable to login, please try again.", Toast.LENGTH_SHORT).show();
 							}
 						} catch (JSONException e) {
 							Toast.makeText(LoginActivity.this, "Account with mobile no +91 " + mob + " doesn't exist.", Toast.LENGTH_SHORT).show();
@@ -79,8 +89,11 @@ public class LoginActivity extends AppCompatActivity {
 					}
 
 					@Override
-					public void executeAfterErrorResponse() {
-						Toast.makeText(LoginActivity.this, "Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+					public void executeAfterErrorResponse(String error) {
+						progressBar.setVisibility(View.GONE);
+						login.setEnabled(true);
+						Log.e(TAG, error);
+						Toast.makeText(LoginActivity.this, "Unable to login, please try again.", Toast.LENGTH_SHORT).show();
 					}
 				});
 			}

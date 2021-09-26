@@ -2,6 +2,9 @@ package com.messengerhelloworld.helloworld.utils;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import com.messengerhelloworld.helloworld.interfaces.AfterSuccessfulOtpVerification;
 
 public class OtpVerification {
+	private static final String TAG = "hwOtpVerification";
 	private final FirebaseAuth mAuth;
 	private final Activity activity;
 	private String verification_id;
@@ -37,27 +41,29 @@ public class OtpVerification {
 
 					@Override
 					public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-						Log.i("HelloWorld", "Verification Completed");
+						Log.i(TAG, "OTP Verification Completed");
 					}
 
 					@Override
 					public void onVerificationFailed(@NonNull FirebaseException e) {
-						Log.i("HelloWorld", "Verification Failed");
+						Log.i(TAG, "OTP Verification Failed");
 					}
 
 					@Override
 					public void onCodeSent(@NonNull String verificationId,
 										   @NonNull PhoneAuthProvider.ForceResendingToken token) {
 						verification_id = verificationId;
-						Log.i("HelloWorld", "OTP Sent to the user successfully");
+						Log.i(TAG, "OTP is sent to the user successfully");
 					}
 				})
 				.build();
 		PhoneAuthProvider.verifyPhoneNumber(options);
 	}
 
-	public void verifyOtp(String enteredOtp, AfterSuccessfulOtpVerification afterSuccessfulOtpVerification) {
+	public void verifyOtp(String enteredOtp, AfterSuccessfulOtpVerification afterSuccessfulOtpVerification, Button button, ProgressBar progressBar) {
 		if(verification_id != null) {
+			button.setEnabled(false);
+			progressBar.setVisibility(View.VISIBLE);
 			PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verification_id, enteredOtp);
 			mAuth.signInWithCredential(credential)
 				.addOnCompleteListener(activity, task -> {
@@ -65,6 +71,8 @@ public class OtpVerification {
 						afterSuccessfulOtpVerification.execute();
 					else
 						Toast.makeText(activity, "You have entered Wrong OTP.", Toast.LENGTH_SHORT).show();
+					progressBar.setVisibility(View.GONE);
+					button.setEnabled(true);
 				});
 		}
 		else

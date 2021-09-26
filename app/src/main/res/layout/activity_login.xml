@@ -8,7 +8,7 @@
     tools:context=".activities.LoginActivity">
 
     <LinearLayout
-        android:id="@+id/loginLayout"
+        android:id="@+id/loginLayout_activityLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -72,6 +72,20 @@
             android:textColor="@color/black"
             android:textSize="18sp" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar_activityLogin"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/reg_activityLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginLayout_activityLogin"
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_atop"
+        android:indeterminateTint="@color/color1"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/reg_activityLogin"

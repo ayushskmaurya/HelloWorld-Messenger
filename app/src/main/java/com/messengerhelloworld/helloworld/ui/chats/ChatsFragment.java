@@ -10,10 +10,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.adapters.ChatsAdapter;
@@ -25,9 +26,12 @@ import org.json.JSONArray;
 import java.util.HashMap;
 
 public class ChatsFragment extends Fragment {
+	private static final String TAG = "hwChatsFragment";
 	private Context context;
 	private DatabaseOperations databaseOperations;
+	private ProgressBar chatsProgressBar;
 	private RecyclerView chatsRecyclerView;
+	private View noChats;
 
 	@Override
 	public void onAttach(Context context) {
@@ -42,6 +46,10 @@ public class ChatsFragment extends Fragment {
 
 		View chatsLayout = inflater.inflate(R.layout.fragment_chats, container, false);
 
+		chatsProgressBar = chatsLayout.findViewById(R.id.progressBar_chatsFragment);
+		chatsRecyclerView = chatsLayout.findViewById(R.id.chats_chatsFragment);
+		noChats = chatsLayout.findViewById(R.id.noChats_chatsFragment);
+
 		SharedPreferences sp = getActivity().getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 		HashMap<String, String> data = new HashMap<>();
 		data.put("userid", sp.getString("userId", null));
@@ -49,15 +57,23 @@ public class ChatsFragment extends Fragment {
 		databaseOperations.retrieveChats(data, new AfterJsonArrayResponseIsReceived() {
 			@Override
 			public void executeAfterResponse(JSONArray response) {
-				chatsRecyclerView = chatsLayout.findViewById(R.id.chatsRecyclerView);
-				chatsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-				ChatsAdapter chatsAdapter = new ChatsAdapter(response, context);
-				chatsRecyclerView.setAdapter(chatsAdapter);
+				chatsProgressBar.setVisibility(View.GONE);
+				if(response.length() != 0) {
+					noChats.setVisibility(View.GONE);
+					chatsRecyclerView.setVisibility(View.VISIBLE);
+					chatsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+					ChatsAdapter chatsAdapter = new ChatsAdapter(response, context);
+					chatsRecyclerView.setAdapter(chatsAdapter);
+				}
+				else {
+					chatsRecyclerView.setVisibility(View.GONE);
+					noChats.setVisibility(View.VISIBLE);
+				}
 			}
 
 			@Override
-			public void executeAfterErrorResponse() {
-				Toast.makeText(context, "Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+			public void executeAfterErrorResponse(String error) {
+				Log.e(TAG, error);
 			}
 		});
 		return chatsLayout;

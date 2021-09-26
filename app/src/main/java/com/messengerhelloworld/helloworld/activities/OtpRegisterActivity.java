@@ -9,8 +9,10 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.messengerhelloworld.helloworld.interfaces.AfterStringResponseIsReceiv
 import java.util.HashMap;
 
 public class OtpRegisterActivity extends AppCompatActivity {
+	private static final String TAG = "hwOtpRegisterActivity";
 	private OtpVerification otpVerification;
 	private TextView resendOtp;
 	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);
@@ -35,20 +38,21 @@ public class OtpRegisterActivity extends AppCompatActivity {
 		String name = intent1.getStringExtra("registeredName");
 		String mob = intent1.getStringExtra("registeredMob");
 
-		resendOtp = findViewById(R.id.resend_otpActivity);
+		resendOtp = findViewById(R.id.resend_activityOtpRegister);
 		startTimer(mob);
 
 		// Sending OTP to the user.
 		otpVerification = new OtpVerification(OtpRegisterActivity.this);
 		otpVerification.sendOtp(mob);
 
-		TextView textView = findViewById(R.id.text_otpActivity);
+		TextView textView = findViewById(R.id.text_activityOtpRegister);
 		String text = "The OTP has been sent to +91 " + mob + ". Please enter the OTP to complete the registration.";
 		textView.setText(text);
 
 		// Verifying the OTP entered by user.
-		EditText enteredOtpView = findViewById(R.id.otp_otpActivity);
-		Button verify = findViewById(R.id.verify_otpActivity);
+		EditText enteredOtpView = findViewById(R.id.otp_activityOtpRegister);
+		ProgressBar progressBar = findViewById(R.id.progressBar_activityOtpRegister);
+		Button verify = findViewById(R.id.verify_activityOtpRegister);
 		verify.setOnClickListener(v -> {
 			String enteredOtp = enteredOtpView.getText().toString().trim();
 			if(!enteredOtp.matches("^[0-9]{6}$"))
@@ -81,11 +85,12 @@ public class OtpRegisterActivity extends AppCompatActivity {
 						}
 
 						@Override
-						public void executeAfterErrorResponse() {
-							Toast.makeText(OtpRegisterActivity.this, "Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+						public void executeAfterErrorResponse(String error) {
+							Log.e(TAG, error);
+							Toast.makeText(OtpRegisterActivity.this, "Unable to complete registration, please try again.", Toast.LENGTH_SHORT).show();
 						}
 					});
-				});
+				}, verify, progressBar);
 		});
 	}
 

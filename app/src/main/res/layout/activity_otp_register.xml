@@ -8,7 +8,7 @@
     tools:context=".activities.OtpRegisterActivity">
 
     <LinearLayout
-        android:id="@+id/otpLayout"
+        android:id="@+id/otpLayout_activityOtpRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/text_otpActivity"
+            android:id="@+id/text_activityOtpRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -31,7 +31,7 @@
             android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/otp_otpActivity"
+            android:id="@+id/otp_activityOtpRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -48,7 +48,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/resend_otpActivity"
+            android:id="@+id/resend_activityOtpRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -58,7 +58,7 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/verify_otpActivity"
+            android:id="@+id/verify_activityOtpRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -69,4 +69,18 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar_activityOtpRegister"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otpLayout_activityOtpRegister"
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_atop"
+        android:indeterminateTint="@color/color1"
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

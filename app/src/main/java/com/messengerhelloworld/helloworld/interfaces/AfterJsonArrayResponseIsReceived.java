@@ -4,5 +4,5 @@ import org.json.JSONArray;
 
 public interface AfterJsonArrayResponseIsReceived {
 	void executeAfterResponse(JSONArray response);
-	void executeAfterErrorResponse();
+	void executeAfterErrorResponse(String error);
 }

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
+	private static final String TAG = "hwChatsAdapter";
 	private final JSONArray localDataSet;
 	private Context context;
 
@@ -27,10 +27,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
 		public ViewHolder(View view) {
 			super(view);
-			userChat = view.findViewById(R.id.user_chat);
-			userName = (TextView) view.findViewById(R.id.user_name);
-			lastMsg = (TextView) view.findViewById(R.id.last_msg);
-			lastMsgTime = (TextView) view.findViewById(R.id.last_msg_time);
+			userChat = view.findViewById(R.id.chat_RowItemChats);
+			userName = (TextView) view.findViewById(R.id.name_RowItemChats);
+			lastMsg = (TextView) view.findViewById(R.id.lastMsg_RowItemChats);
+			lastMsgTime = (TextView) view.findViewById(R.id.lastMsgTime_RowItemChats);
 		}
 
 		public View getUserChat() {
@@ -63,9 +63,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 	public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 		viewHolder.getUserChat().setOnClickListener(v -> {
 			try {
-				Log.d("HelloWorld: ChatId", localDataSet.getJSONObject(position).getString("chatid"));
+				Log.d(TAG, "ChatId: " + localDataSet.getJSONObject(position).getString("chatid"));
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(TAG, e.toString());
 			}
 		});
 		try {
@@ -73,7 +73,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 			viewHolder.getLastMsg().setText(localDataSet.getJSONObject(position).getString("message"));
 			viewHolder.getLastMsgTime().setText(localDataSet.getJSONObject(position).getString("dateTime").substring(11, 16));
 		} catch (JSONException e) {
-			Toast.makeText(context, "Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+			Log.e(TAG, e.toString());
 		}
 	}
 

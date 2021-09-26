@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.messengerhelloworld.helloworld.R;
@@ -19,6 +22,7 @@ import org.json.JSONException;
 import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
+	private static final String TAG = "hwRegisterActivity";
 	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);
 
 	@Override
@@ -31,6 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
 		EditText pwdView = findViewById(R.id.pwd_activityRegister);
 		EditText cpwdView = findViewById(R.id.cpwd_activityRegister);
 		Button register = findViewById(R.id.reg_activityRegister);
+		ProgressBar progressBar = findViewById(R.id.progressBar_activityRegister);
 
 		register.setOnClickListener(v -> {
 			String name = nameView.getText().toString().trim();
@@ -47,6 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
 			else if(!pwd.equals(cpwd))
 				Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show();
 			else {
+				register.setEnabled(false);
+				progressBar.setVisibility(View.VISIBLE);
 				HashMap<String, String> data = new HashMap<>();
 				data.put("columns", "mobile_no");
 				data.put("table_name", "users");
@@ -55,6 +62,8 @@ public class RegisterActivity extends AppCompatActivity {
 				databaseOperations.retrieve(data, new AfterJsonArrayResponseIsReceived() {
 					@Override
 					public void executeAfterResponse(JSONArray response) {
+						progressBar.setVisibility(View.GONE);
+						register.setEnabled(true);
 						try {
 							response.getJSONObject(0);
 							Toast.makeText(RegisterActivity.this, "Account with mobile no +91 " + mob + " already exists.", Toast.LENGTH_SHORT).show();
@@ -67,14 +76,18 @@ public class RegisterActivity extends AppCompatActivity {
 								intent.putExtra("registeredPasswordHash", hash);
 								startActivity(intent);
 							} catch (Exception e) {
-								Toast.makeText(RegisterActivity.this, "Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+								Log.e(TAG, e.toString());
+								Toast.makeText(RegisterActivity.this, "Unable to complete registration, please try again.", Toast.LENGTH_SHORT).show();
 							}
 						}
 					}
 
 					@Override
-					public void executeAfterErrorResponse() {
-						Toast.makeText(RegisterActivity.this, "Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+					public void executeAfterErrorResponse(String error) {
+						progressBar.setVisibility(View.GONE);
+						register.setEnabled(true);
+						Log.e(TAG, error);
+						Toast.makeText(RegisterActivity.this, "Unable to complete registration, please try again.", Toast.LENGTH_SHORT).show();
 					}
 				});
 			}

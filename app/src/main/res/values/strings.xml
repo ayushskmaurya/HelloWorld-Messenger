@@ -21,4 +21,6 @@
     <string name="menu_logout">Logout</string>
 
     <string name="user_profile_img">User Profile Image</string>
+    <string name="no_chats_msg">No Chats to show!</string>
+    <string name="no_chats_info">Tap the menu button to view Contacts and for more options.</string>
 </resources>

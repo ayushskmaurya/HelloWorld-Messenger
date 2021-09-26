@@ -1,6 +1,7 @@
 package com.messengerhelloworld.helloworld.utils;
 
 import android.app.Activity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -17,19 +18,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 public class DatabaseOperations {
+	private static final String TAG = "hwDatabaseOperations";
 	private final Activity activity;
 
 	public DatabaseOperations(Activity activity) {
 		this.activity = activity;
 	}
 
+	// Inserting new row in the database table.
 	public void insert(HashMap<String, String> data, AfterStringResponseIsReceived afterStringResponseIsReceived) {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
 						new Base().getBASE_URL() + "/insert.php",
 						response -> afterStringResponseIsReceived.executeAfterResponse(response),
-						error -> afterStringResponseIsReceived.executeAfterErrorResponse()
+						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
 				) {
 					@Override
 					protected Map<String, String> getParams() {
@@ -39,6 +42,7 @@ public class DatabaseOperations {
 		);
 	}
 
+	// Retrieving data from the database table.
 	public void retrieve(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
@@ -48,12 +52,11 @@ public class DatabaseOperations {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
 							} catch (JSONException e) {
-								Toast.makeText(activity, "333Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+								Log.e(TAG, e.toString());
+								Toast.makeText(activity, "Unable to complete the process, please try again.", Toast.LENGTH_SHORT).show();
 							}
 						},
-						error -> {
-							Toast.makeText(activity, String.valueOf(error), Toast.LENGTH_SHORT).show();
-							afterJsonArrayResponseIsReceived.executeAfterErrorResponse();}
+						error -> afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString())
 				) {
 					@Override
 					protected Map<String, String> getParams() {
@@ -63,6 +66,7 @@ public class DatabaseOperations {
 		);
 	}
 
+	// Retrieving all the chats of the user.
 	public void retrieveChats(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
@@ -72,10 +76,10 @@ public class DatabaseOperations {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
 							} catch (JSONException e) {
-								Toast.makeText(activity, "Sorry! Something went wrong.", Toast.LENGTH_SHORT).show();
+								Log.e(TAG, e.toString());
 							}
 						},
-						error -> afterJsonArrayResponseIsReceived.executeAfterErrorResponse()
+						error -> afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString())
 				) {
 					@Override
 					protected Map<String, String> getParams() {
