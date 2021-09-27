@@ -10,6 +10,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
+import android.os.Handler;
 
 import com.messengerhelloworld.helloworld.interfaces.AfterStringResponseIsReceived;
 import com.messengerhelloworld.helloworld.interfaces.AfterJsonArrayResponseIsReceived;
@@ -20,6 +21,7 @@ import org.json.JSONException;
 public class DatabaseOperations {
 	private static final String TAG = "hwDatabaseOperations";
 	private final Activity activity;
+	private final Handler handler = new Handler();
 
 	public DatabaseOperations(Activity activity) {
 		this.activity = activity;
@@ -78,8 +80,14 @@ public class DatabaseOperations {
 							} catch (JSONException e) {
 								Log.e(TAG, e.toString());
 							}
+							finally {
+								waitFor3Secs(data, afterJsonArrayResponseIsReceived);
+							}
 						},
-						error -> afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString())
+						error -> {
+							afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString());
+							waitFor3Secs(data, afterJsonArrayResponseIsReceived);
+						}
 				) {
 					@Override
 					protected Map<String, String> getParams() {
@@ -87,5 +95,15 @@ public class DatabaseOperations {
 					}
 				}
 		);
+	}
+
+	// Waiting for 3 seconds.
+	private void waitFor3Secs(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				retrieveChats(data, afterJsonArrayResponseIsReceived);
+			}
+		}, 3000);
 	}
 }

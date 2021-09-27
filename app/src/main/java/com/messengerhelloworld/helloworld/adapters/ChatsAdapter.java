@@ -1,6 +1,5 @@
 package com.messengerhelloworld.helloworld.adapters;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import org.json.JSONException;
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 	private static final String TAG = "hwChatsAdapter";
 	private final JSONArray localDataSet;
-	private Context context;
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private final View userChat;
@@ -28,9 +26,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 		public ViewHolder(View view) {
 			super(view);
 			userChat = view.findViewById(R.id.chat_RowItemChats);
-			userName = (TextView) view.findViewById(R.id.name_RowItemChats);
-			lastMsg = (TextView) view.findViewById(R.id.lastMsg_RowItemChats);
-			lastMsgTime = (TextView) view.findViewById(R.id.lastMsgTime_RowItemChats);
+			userName = view.findViewById(R.id.name_RowItemChats);
+			lastMsg = view.findViewById(R.id.lastMsg_RowItemChats);
+			lastMsgTime = view.findViewById(R.id.lastMsgTime_RowItemChats);
 		}
 
 		public View getUserChat() {
@@ -47,9 +45,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 		}
 	}
 
-	public ChatsAdapter(JSONArray dataSet, Context context) {
+	public ChatsAdapter(JSONArray dataSet) {
 		localDataSet = dataSet;
-		this.context = context;
 	}
 
 	@Override

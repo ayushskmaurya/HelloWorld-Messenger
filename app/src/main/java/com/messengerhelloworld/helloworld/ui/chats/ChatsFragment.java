@@ -32,6 +32,7 @@ public class ChatsFragment extends Fragment {
 	private ProgressBar chatsProgressBar;
 	private RecyclerView chatsRecyclerView;
 	private View noChats;
+	private String userChats = null;
 
 	@Override
 	public void onAttach(Context context) {
@@ -58,16 +59,19 @@ public class ChatsFragment extends Fragment {
 			@Override
 			public void executeAfterResponse(JSONArray response) {
 				chatsProgressBar.setVisibility(View.GONE);
-				if(response.length() != 0) {
-					noChats.setVisibility(View.GONE);
-					chatsRecyclerView.setVisibility(View.VISIBLE);
-					chatsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-					ChatsAdapter chatsAdapter = new ChatsAdapter(response, context);
-					chatsRecyclerView.setAdapter(chatsAdapter);
-				}
-				else {
-					chatsRecyclerView.setVisibility(View.GONE);
-					noChats.setVisibility(View.VISIBLE);
+				if(!String.valueOf(response).equals(userChats)) {
+					if(response.length() != 0) {
+						noChats.setVisibility(View.GONE);
+						chatsRecyclerView.setVisibility(View.VISIBLE);
+						chatsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+						ChatsAdapter chatsAdapter = new ChatsAdapter(response);
+						chatsRecyclerView.setAdapter(chatsAdapter);
+					}
+					else {
+						chatsRecyclerView.setVisibility(View.GONE);
+						noChats.setVisibility(View.VISIBLE);
+					}
+					userChats = String.valueOf(response);
 				}
 			}
 
