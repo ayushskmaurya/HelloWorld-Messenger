@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.messengerhelloworld.helloworld.R;
+import com.messengerhelloworld.helloworld.interfaces.AfterOtpIsEntered;
 import com.messengerhelloworld.helloworld.utils.OtpVerification;
 import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
 import com.messengerhelloworld.helloworld.interfaces.AfterStringResponseIsReceived;
@@ -58,39 +60,59 @@ public class OtpRegisterActivity extends AppCompatActivity {
 			if(!enteredOtp.matches("^[0-9]{6}$"))
 				Toast.makeText(this, "Please enter the valid OTP.", Toast.LENGTH_SHORT).show();
 			else
-				otpVerification.verifyOtp(enteredOtp, () -> {
-					HashMap<String, String> data = new HashMap<>();
-					data.put("table_name", "users");
-					data.put("name", name);
-					data.put("mobile_no", mob);
-					data.put("password", intent1.getStringExtra("registeredPasswordHash"));
+				otpVerification.verifyOtp(enteredOtp, new AfterOtpIsEntered() {
+					@Override
+					public void execute() {
+						verify.setEnabled(false);
+						progressBar.setVisibility(View.VISIBLE);
+					}
 
-					databaseOperations.insert(data, new AfterStringResponseIsReceived() {
-						@Override
-						public void executeAfterResponse(String response) {
-							SharedPreferences sp = getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
-							SharedPreferences.Editor ed = sp.edit();
-							ed.putString("userId", response);
-							ed.putString("userName", name);
-							ed.putString("userMob", mob);
-							ed.apply();
+					@Override
+					public void ifCorrectOtp() {
+						HashMap<String, String> data = new HashMap<>();
+						data.put("table_name", "users");
+						data.put("name", name);
+						data.put("mobile_no", mob);
+						data.put("password", intent1.getStringExtra("registeredPasswordHash"));
 
-							intent1.removeExtra("registeredMob");
-							intent1.removeExtra("registeredName");
-							intent1.removeExtra("registeredPasswordHash");
+						databaseOperations.insert(data, new AfterStringResponseIsReceived() {
+							@Override
+							public void executeAfterResponse(String response) {
+								progressBar.setVisibility(View.GONE);
+								verify.setEnabled(true);
+								SharedPreferences sp = getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
+								SharedPreferences.Editor ed = sp.edit();
+								ed.putString("userId", response);
+								ed.putString("userName", name);
+								ed.putString("userMob", mob);
+								ed.apply();
 
-							Intent intent2 = new Intent(OtpRegisterActivity.this, MainActivity.class);
-							intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-							startActivity(intent2);
-						}
+								intent1.removeExtra("registeredMob");
+								intent1.removeExtra("registeredName");
+								intent1.removeExtra("registeredPasswordHash");
 
-						@Override
-						public void executeAfterErrorResponse(String error) {
-							Log.e(TAG, error);
-							Toast.makeText(OtpRegisterActivity.this, "Unable to complete registration, please try again.", Toast.LENGTH_SHORT).show();
-						}
-					});
-				}, verify, progressBar);
+								Intent intent2 = new Intent(OtpRegisterActivity.this, MainActivity.class);
+								intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+								startActivity(intent2);
+							}
+
+							@Override
+							public void executeAfterErrorResponse(String error) {
+								progressBar.setVisibility(View.GONE);
+								verify.setEnabled(true);
+								Log.e(TAG, error);
+								Toast.makeText(OtpRegisterActivity.this, "Unable to complete registration, please try again.", Toast.LENGTH_SHORT).show();
+							}
+						});
+					}
+
+					@Override
+					public void ifWrongOtp() {
+						progressBar.setVisibility(View.GONE);
+						verify.setEnabled(true);
+						Toast.makeText(OtpRegisterActivity.this, "You have entered Wrong OTP.", Toast.LENGTH_SHORT).show();
+					}
+				});
 		});
 	}
 

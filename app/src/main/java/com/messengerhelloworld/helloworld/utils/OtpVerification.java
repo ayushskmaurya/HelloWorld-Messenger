@@ -2,9 +2,6 @@ package com.messengerhelloworld.helloworld.utils;
 
 import android.app.Activity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,7 +14,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
-import com.messengerhelloworld.helloworld.interfaces.AfterSuccessfulOtpVerification;
+import com.messengerhelloworld.helloworld.interfaces.AfterOtpIsEntered;
 
 public class OtpVerification {
 	private static final String TAG = "hwOtpVerification";
@@ -60,19 +57,16 @@ public class OtpVerification {
 		PhoneAuthProvider.verifyPhoneNumber(options);
 	}
 
-	public void verifyOtp(String enteredOtp, AfterSuccessfulOtpVerification afterSuccessfulOtpVerification, Button button, ProgressBar progressBar) {
+	public void verifyOtp(String enteredOtp, AfterOtpIsEntered afterOtpIsEntered) {
 		if(verification_id != null) {
-			button.setEnabled(false);
-			progressBar.setVisibility(View.VISIBLE);
+			afterOtpIsEntered.execute();
 			PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verification_id, enteredOtp);
 			mAuth.signInWithCredential(credential)
 				.addOnCompleteListener(activity, task -> {
 					if(task.isSuccessful())
-						afterSuccessfulOtpVerification.execute();
+						afterOtpIsEntered.ifCorrectOtp();
 					else
-						Toast.makeText(activity, "You have entered Wrong OTP.", Toast.LENGTH_SHORT).show();
-					progressBar.setVisibility(View.GONE);
-					button.setEnabled(true);
+						afterOtpIsEntered.ifWrongOtp();
 				});
 		}
 		else
