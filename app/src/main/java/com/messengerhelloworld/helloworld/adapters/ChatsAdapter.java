@@ -1,5 +1,7 @@
 package com.messengerhelloworld.helloworld.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +11,14 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.messengerhelloworld.helloworld.R;
+import com.messengerhelloworld.helloworld.activities.ChatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 	private static final String TAG = "hwChatsAdapter";
+	private final Context context;
 	private final JSONArray localDataSet;
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -45,7 +49,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 		}
 	}
 
-	public ChatsAdapter(JSONArray dataSet) {
+	public ChatsAdapter(Context context, JSONArray dataSet) {
+		this.context = context;
 		localDataSet = dataSet;
 	}
 
@@ -60,7 +65,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 	public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 		viewHolder.getUserChat().setOnClickListener(v -> {
 			try {
-				Log.d(TAG, "ChatId: " + localDataSet.getJSONObject(position).getString("chatid"));
+				Intent intent = new Intent(context, ChatActivity.class);
+				intent.putExtra("chatId", localDataSet.getJSONObject(position).getString("chatid"));
+				intent.putExtra("receiverUserName", localDataSet.getJSONObject(position).getString("name"));
+				context.startActivity(intent);
 			} catch (JSONException e) {
 				Log.e(TAG, e.toString());
 			}

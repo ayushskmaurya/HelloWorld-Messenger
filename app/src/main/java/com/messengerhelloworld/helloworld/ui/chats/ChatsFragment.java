@@ -64,7 +64,7 @@ public class ChatsFragment extends Fragment {
 						noChats.setVisibility(View.GONE);
 						chatsRecyclerView.setVisibility(View.VISIBLE);
 						chatsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-						ChatsAdapter chatsAdapter = new ChatsAdapter(response);
+						ChatsAdapter chatsAdapter = new ChatsAdapter(context, response);
 						chatsRecyclerView.setAdapter(chatsAdapter);
 					}
 					else {
