@@ -67,9 +67,9 @@ public class LoginActivity extends AppCompatActivity {
 								if(hash.equals(user.getString("password"))) {
 									SharedPreferences sp = getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 									SharedPreferences.Editor ed = sp.edit();
-									ed.putString("userId", user.getString("userid"));
-									ed.putString("userName", user.getString("name"));
-									ed.putString("userMob", mob);
+									ed.putString("HelloWorldUserId", user.getString("userid"));
+									ed.putString("HelloWorldUserName", user.getString("name"));
+									ed.putString("HelloWorldUserMobileNo", mob);
 									ed.apply();
 
 									Intent intent = new Intent(LoginActivity.this, MainActivity.class);

@@ -18,6 +18,8 @@ import org.json.JSONException;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 	private static final String TAG = "hwChatsAdapter";
+	private static final String CHAT_ID = "com.messengerhelloworld.helloworld.chatId";
+	private static final String RECEIVER_USER_NAME = "com.messengerhelloworld.helloworld.receiverUserName";
 	private final Context context;
 	private final JSONArray localDataSet;
 
@@ -66,8 +68,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 		viewHolder.getUserChat().setOnClickListener(v -> {
 			try {
 				Intent intent = new Intent(context, ChatActivity.class);
-				intent.putExtra("chatId", localDataSet.getJSONObject(position).getString("chatid"));
-				intent.putExtra("receiverUserName", localDataSet.getJSONObject(position).getString("name"));
+				intent.putExtra(CHAT_ID, localDataSet.getJSONObject(position).getString("chatid"));
+				intent.putExtra(RECEIVER_USER_NAME, localDataSet.getJSONObject(position).getString("name"));
 				context.startActivity(intent);
 			} catch (JSONException e) {
 				Log.e(TAG, e.toString());

@@ -23,6 +23,9 @@ import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 	private static final String TAG = "hwRegisterActivity";
+	private static final String REGISTERED_NAME = "com.messengerhelloworld.helloworld.registeredName";
+	private static final String REGISTERED_MOBILE_NO = "com.messengerhelloworld.helloworld.registeredMobileNo";
+	private static final String REGISTERED_PASSWORD_HASH = "com.messengerhelloworld.helloworld.registeredPasswordHash";
 	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);
 
 	@Override
@@ -71,9 +74,9 @@ public class RegisterActivity extends AppCompatActivity {
 							try {
 								String hash = new SHA256Hash().getHash(pwd);
 								Intent intent = new Intent(RegisterActivity.this, OtpRegisterActivity.class);
-								intent.putExtra("registeredName", name);
-								intent.putExtra("registeredMob", mob);
-								intent.putExtra("registeredPasswordHash", hash);
+								intent.putExtra(REGISTERED_NAME, name);
+								intent.putExtra(REGISTERED_MOBILE_NO, mob);
+								intent.putExtra(REGISTERED_PASSWORD_HASH, hash);
 								startActivity(intent);
 							} catch (Exception e) {
 								Log.e(TAG, e.toString());

@@ -21,6 +21,8 @@ import java.util.HashMap;
 
 public class ChatActivity extends AppCompatActivity {
 	private static final String TAG = "hwChatActivity";
+	private static final String CHAT_ID = "com.messengerhelloworld.helloworld.chatId";
+	private static final String RECEIVER_USER_NAME = "com.messengerhelloworld.helloworld.receiverUserName";
 	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);
 	private RecyclerView chatRecyclerView;
 
@@ -30,8 +32,8 @@ public class ChatActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_chat);
 
 		Intent intent = getIntent();
-		String chatId = intent.getStringExtra("chatId");
-		String receiverUserName = intent.getStringExtra("receiverUserName");
+		String chatId = intent.getStringExtra(CHAT_ID);
+		String receiverUserName = intent.getStringExtra(RECEIVER_USER_NAME);
 		SharedPreferences sp = getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 
 		getSupportActionBar().setTitle(receiverUserName);
@@ -48,7 +50,7 @@ public class ChatActivity extends AppCompatActivity {
 			@Override
 			public void executeAfterResponse(JSONArray response) {
 				chatRecyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
-				ChatAdapter chatAdapter = new ChatAdapter(response, sp.getString("userId", null));
+				ChatAdapter chatAdapter = new ChatAdapter(response, sp.getString("HelloWorldUserId", null));
 				chatRecyclerView.setAdapter(chatAdapter);
 			}
 

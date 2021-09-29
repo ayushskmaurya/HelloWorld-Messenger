@@ -53,7 +53,7 @@ public class ChatsFragment extends Fragment {
 
 		SharedPreferences sp = getActivity().getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 		HashMap<String, String> data = new HashMap<>();
-		data.put("userid", sp.getString("userId", null));
+		data.put("userid", sp.getString("HelloWorldUserId", null));
 
 		databaseOperations.retrieveChats(data, new AfterJsonArrayResponseIsReceived() {
 			@Override

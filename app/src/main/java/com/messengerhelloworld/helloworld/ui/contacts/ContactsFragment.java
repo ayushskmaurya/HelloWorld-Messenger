@@ -60,7 +60,7 @@ public class ContactsFragment extends Fragment {
 			SharedPreferences sp = getActivity().getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 			HashMap<String, String> data = new HashMap<>();
 			data.put("phone_nos", getContacts());
-			data.put("userid", sp.getString("userId", null));
+			data.put("userid", sp.getString("HelloWorldUserId", null));
 
 			DatabaseOperations databaseOperations = new DatabaseOperations((Activity) context);
 			databaseOperations.retrieveContacts(data, new AfterJsonArrayResponseIsReceived() {

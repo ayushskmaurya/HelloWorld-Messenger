@@ -27,6 +27,9 @@ import java.util.HashMap;
 
 public class OtpRegisterActivity extends AppCompatActivity {
 	private static final String TAG = "hwOtpRegisterActivity";
+	private static final String REGISTERED_NAME = "com.messengerhelloworld.helloworld.registeredName";
+	private static final String REGISTERED_MOBILE_NO = "com.messengerhelloworld.helloworld.registeredMobileNo";
+	private static final String REGISTERED_PASSWORD_HASH = "com.messengerhelloworld.helloworld.registeredPasswordHash";
 	private OtpVerification otpVerification;
 	private TextView resendOtp;
 	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);
@@ -37,8 +40,8 @@ public class OtpRegisterActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_otp_register);
 
 		Intent intent1 = getIntent();
-		String name = intent1.getStringExtra("registeredName");
-		String mob = intent1.getStringExtra("registeredMob");
+		String name = intent1.getStringExtra(REGISTERED_NAME);
+		String mob = intent1.getStringExtra(REGISTERED_MOBILE_NO);
 
 		resendOtp = findViewById(R.id.resend_activityOtpRegister);
 		startTimer(mob);
@@ -73,7 +76,7 @@ public class OtpRegisterActivity extends AppCompatActivity {
 						data.put("table_name", "users");
 						data.put("name", name);
 						data.put("mobile_no", mob);
-						data.put("password", intent1.getStringExtra("registeredPasswordHash"));
+						data.put("password", intent1.getStringExtra(REGISTERED_PASSWORD_HASH));
 
 						databaseOperations.insert(data, new AfterStringResponseIsReceived() {
 							@Override
@@ -82,14 +85,14 @@ public class OtpRegisterActivity extends AppCompatActivity {
 								verify.setEnabled(true);
 								SharedPreferences sp = getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 								SharedPreferences.Editor ed = sp.edit();
-								ed.putString("userId", response);
-								ed.putString("userName", name);
-								ed.putString("userMob", mob);
+								ed.putString("HelloWorldUserId", response);
+								ed.putString("HelloWorldUserName", name);
+								ed.putString("HelloWorldUserMobileNo", mob);
 								ed.apply();
 
-								intent1.removeExtra("registeredMob");
-								intent1.removeExtra("registeredName");
-								intent1.removeExtra("registeredPasswordHash");
+								intent1.removeExtra(REGISTERED_MOBILE_NO);
+								intent1.removeExtra(REGISTERED_NAME);
+								intent1.removeExtra(REGISTERED_PASSWORD_HASH);
 
 								Intent intent2 = new Intent(OtpRegisterActivity.this, MainActivity.class);
 								intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

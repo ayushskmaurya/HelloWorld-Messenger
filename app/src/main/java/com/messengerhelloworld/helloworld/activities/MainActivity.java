@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences sp = getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
-        if(sp.getString("userId", null) == null) {
+        if(sp.getString("HelloWorldUserId", null) == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
             View headerView = navigationView.getHeaderView(0);
             TextView userName = headerView.findViewById(R.id.userName);
             TextView userMobileNo = headerView.findViewById(R.id.userMobileNo);
-            userName.setText(sp.getString("userName", null));
-            userMobileNo.setText(sp.getString("userMob", null));
+            userName.setText(sp.getString("HelloWorldUserName", null));
+            userMobileNo.setText(sp.getString("HelloWorldUserMobileNo", null));
 
             Menu menu = navigationView.getMenu();
             menu.findItem(R.id.menu_logout).setOnMenuItemClickListener(item -> {
