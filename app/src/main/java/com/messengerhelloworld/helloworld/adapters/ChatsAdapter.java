@@ -29,10 +29,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
 		public ViewHolder(View view) {
 			super(view);
-			userChat = view.findViewById(R.id.chat_RowItemChats);
-			userName = view.findViewById(R.id.name_RowItemChats);
-			lastMsg = view.findViewById(R.id.lastMsg_RowItemChats);
-			lastMsgTime = view.findViewById(R.id.lastMsgTime_RowItemChats);
+			userChat = view.findViewById(R.id.chat_rowItemChats);
+			userName = view.findViewById(R.id.name_rowItemChats);
+			lastMsg = view.findViewById(R.id.lastMsg_rowItemChats);
+			lastMsgTime = view.findViewById(R.id.lastMsgTime_rowItemChats);
 		}
 
 		public View getUserChat() {

@@ -3,6 +3,7 @@
     package="com.messengerhelloworld.helloworld">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ChatActivity"
+        <activity
+            android:name=".activities.ChatActivity"
             android:label=""
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait" />

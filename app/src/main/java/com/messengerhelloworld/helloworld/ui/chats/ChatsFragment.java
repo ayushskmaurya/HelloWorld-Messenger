@@ -47,9 +47,9 @@ public class ChatsFragment extends Fragment {
 
 		View chatsLayout = inflater.inflate(R.layout.fragment_chats, container, false);
 
-		chatsProgressBar = chatsLayout.findViewById(R.id.progressBar_chatsFragment);
-		chatsRecyclerView = chatsLayout.findViewById(R.id.chats_chatsFragment);
-		noChats = chatsLayout.findViewById(R.id.noChats_chatsFragment);
+		chatsProgressBar = chatsLayout.findViewById(R.id.progressBar_fragmentChats);
+		chatsRecyclerView = chatsLayout.findViewById(R.id.chats_fragmentChats);
+		noChats = chatsLayout.findViewById(R.id.noChats_fragmentChats);
 
 		SharedPreferences sp = getActivity().getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 		HashMap<String, String> data = new HashMap<>();

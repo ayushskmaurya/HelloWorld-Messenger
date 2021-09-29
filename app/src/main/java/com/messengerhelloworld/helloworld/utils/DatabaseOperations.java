@@ -106,4 +106,27 @@ public class DatabaseOperations {
 			}
 		}, 3000);
 	}
+
+	// Retrieving contacts.
+	public void retrieveContacts(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
+		Volley.newRequestQueue(activity).add(
+				new StringRequest(
+						Request.Method.POST,
+						new Base().getBASE_URL() + "/retrieveContacts.php",
+						response -> {
+							try {
+								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
+							} catch (JSONException e) {
+								Log.e(TAG, e.toString());
+							}
+						},
+						error -> afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString())
+				) {
+					@Override
+					protected Map<String, String> getParams() {
+						return data;
+					}
+				}
+		);
+	}
 }
