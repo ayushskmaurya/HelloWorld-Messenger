@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/circular"
-        app:srcCompat="@drawable/default_profile_img" />
+        app:srcCompat="@drawable/icon_default_profile_img" />
 
     <TextView
         android:id="@+id/userName_rowItemContacts"

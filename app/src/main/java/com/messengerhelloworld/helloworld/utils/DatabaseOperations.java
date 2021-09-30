@@ -44,6 +44,23 @@ public class DatabaseOperations {
 		);
 	}
 
+	// Inserting new message in the database table.
+	public void insertMessage(HashMap<String, String> data, AfterStringResponseIsReceived afterStringResponseIsReceived) {
+		Volley.newRequestQueue(activity).add(
+				new StringRequest(
+						Request.Method.POST,
+						new Base().getBASE_URL() + "/insertMessage.php",
+						response -> afterStringResponseIsReceived.executeAfterResponse(response),
+						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
+				) {
+					@Override
+					protected Map<String, String> getParams() {
+						return data;
+					}
+				}
+		);
+	}
+
 	// Retrieving data from the database table.
 	public void retrieve(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
 		Volley.newRequestQueue(activity).add(
