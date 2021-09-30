@@ -21,10 +21,15 @@ import org.json.JSONException;
 public class DatabaseOperations {
 	private static final String TAG = "hwDatabaseOperations";
 	private final Activity activity;
-	private final Handler handler = new Handler();
+	private final Handler handler1 = new Handler();
+	private static boolean FLAG;
 
 	public DatabaseOperations(Activity activity) {
 		this.activity = activity;
+	}
+
+	public void setFLAG(boolean flag) {
+		FLAG = flag;
 	}
 
 	// Inserting new row in the database table.
@@ -85,7 +90,7 @@ public class DatabaseOperations {
 		);
 	}
 
-	// Retrieving all the chats of the user.
+	// Retrieving all the chats.
 	public void retrieveChats(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
@@ -113,10 +118,8 @@ public class DatabaseOperations {
 				}
 		);
 	}
-
-	// Waiting for 3 seconds.
 	private void waitFor3Secs(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
-		handler.postDelayed(new Runnable() {
+		handler1.postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				retrieveChats(data, afterJsonArrayResponseIsReceived);
@@ -145,5 +148,51 @@ public class DatabaseOperations {
 					}
 				}
 		);
+	}
+
+	// Retrieving messages.
+	private static HashMap<String, String> postData_retrieveMsgs;
+	private static AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived_retrieveMsgs;
+	public void retrieveMessages(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
+		postData_retrieveMsgs = data;
+		afterJsonArrayResponseIsReceived_retrieveMsgs = afterJsonArrayResponseIsReceived;
+		Volley.newRequestQueue(activity).add(
+				new StringRequest(
+						Request.Method.POST,
+						new Base().getBASE_URL() + "/retrieve.php",
+						response -> {
+							try {
+								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
+							} catch (JSONException e) {
+								Log.e(TAG, e.toString());
+							}
+							finally {
+								startStopRepeating();
+							}
+						},
+						error -> {
+							afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString());
+							startStopRepeating();
+						}
+				) {
+					@Override
+					protected Map<String, String> getParams() {
+						return data;
+					}
+				}
+		);
+	}
+	private final Handler handler2 = new Handler();
+	private final Runnable runnable2 = new Runnable() {
+		@Override
+		public void run() {
+			retrieveMessages(postData_retrieveMsgs, afterJsonArrayResponseIsReceived_retrieveMsgs);
+		}
+	};
+	public void startStopRepeating() {
+		if(FLAG)
+			handler2.postDelayed(runnable2, 1000);
+		else
+			handler2.removeCallbacks(runnable2);
 	}
 }

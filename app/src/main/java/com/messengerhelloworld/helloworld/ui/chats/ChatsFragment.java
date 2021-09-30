@@ -46,6 +46,7 @@ public class ChatsFragment extends Fragment {
 							 @Nullable Bundle savedInstanceState) {
 
 		View chatsLayout = inflater.inflate(R.layout.fragment_chats, container, false);
+		databaseOperations.setFLAG(false);
 
 		chatsProgressBar = chatsLayout.findViewById(R.id.progressBar_fragmentChats);
 		chatsRecyclerView = chatsLayout.findViewById(R.id.chats_fragmentChats);

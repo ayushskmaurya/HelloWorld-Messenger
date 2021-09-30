@@ -30,12 +30,15 @@ public class ChatActivity extends AppCompatActivity {
 	private static final String RECEIVER_USER_ID = "com.messengerhelloworld.helloworld.receiverUserId";
 	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);
 	private RecyclerView chatRecyclerView;
+	private LinearLayoutManager linearLayoutManager;
 	private String chatId;
+	private HashMap<String, String> postData_retrieveMsgs;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
+		databaseOperations.setFLAG(true);
 
 		Intent intent = getIntent();
 		chatId = intent.getStringExtra(CHAT_ID);
@@ -47,29 +50,29 @@ public class ChatActivity extends AppCompatActivity {
 		getSupportActionBar().setTitle(receiverUserName);
 
 		// Retrieving messages.
-		if(!chatId.equals("null")) {
-			chatRecyclerView = findViewById(R.id.chat_activityChat);
+		chatRecyclerView = findViewById(R.id.chat_activityChat);
 
-			HashMap<String, String> data = new HashMap<>();
-			data.put("columns", "senderid, message, dateTime");
-			data.put("table_name", "messages");
-			data.put("WHERE", "chatid=" + chatId);
-			data.put("ORDER_BY", "dateTime");
+		postData_retrieveMsgs = new HashMap<>();
+		postData_retrieveMsgs.put("columns", "senderid, message, dateTime");
+		postData_retrieveMsgs.put("table_name", "messages");
+		postData_retrieveMsgs.put("WHERE", "chatid=" + chatId);
+		postData_retrieveMsgs.put("ORDER_BY", "dateTime");
 
-			databaseOperations.retrieve(data, new AfterJsonArrayResponseIsReceived() {
-				@Override
-				public void executeAfterResponse(JSONArray response) {
-					chatRecyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
-					ChatAdapter chatAdapter = new ChatAdapter(response, senderId);
-					chatRecyclerView.setAdapter(chatAdapter);
-				}
+		databaseOperations.retrieveMessages(postData_retrieveMsgs, new AfterJsonArrayResponseIsReceived() {
+			@Override
+			public void executeAfterResponse(JSONArray response) {
+				linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
+				linearLayoutManager.setStackFromEnd(true);
+				chatRecyclerView.setLayoutManager(linearLayoutManager);
+				ChatAdapter chatAdapter = new ChatAdapter(response, senderId);
+				chatRecyclerView.setAdapter(chatAdapter);
+			}
 
-				@Override
-				public void executeAfterErrorResponse(String error) {
-					Log.e(TAG, error);
-				}
-			});
-		}
+			@Override
+			public void executeAfterErrorResponse(String error) {
+				Log.e(TAG, error);
+			}
+		});
 
 		// Sending message.
 		TextView messageTextView = findViewById(R.id.msg_activityChat);
@@ -88,6 +91,7 @@ public class ChatActivity extends AppCompatActivity {
 					@Override
 					public void executeAfterResponse(String response) {
 						chatId = response;
+						postData_retrieveMsgs.put("WHERE", "chatid=" + chatId);
 					}
 
 					@Override

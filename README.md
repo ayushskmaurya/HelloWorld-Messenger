@@ -1,9 +1,9 @@
 # HelloWorld-Messenger
 Android Chat Application.
 
-* HelloWorld Messenger will help you connect with your closed ones and business acquaintances.
-* This will be an efficient and easy-to-use Android chatting application.
-* This application is being created using Java for Android app and PHP, MySQL for the server.
+* HelloWorld Messenger helps you connect with your closed ones and business acquaintances.
+* It is an efficient and easy-to-use Android Chat application.
+* This application is created using Java for Android app and PHP, MySQL for the server.
 * Firebase Authentication is used to verify phone number.
 * User will be able to login simultaneously on multiple Android devices.
 * Since, the user data will be stored in server, user will not have to worry about taking backups.
