@@ -18,6 +18,7 @@ import com.messengerhelloworld.helloworld.adapters.ChatAdapter;
 import com.messengerhelloworld.helloworld.interfaces.AfterJsonArrayResponseIsReceived;
 import com.messengerhelloworld.helloworld.interfaces.AfterStringResponseIsReceived;
 import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
+import com.messengerhelloworld.helloworld.utils.ShouldSync;
 
 import org.json.JSONArray;
 
@@ -38,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
-		databaseOperations.setFLAG(true);
+		ShouldSync.setShouldSyncChats(false);
 
 		Intent intent = getIntent();
 		chatId = intent.getStringExtra(CHAT_ID);
@@ -58,6 +59,7 @@ public class ChatActivity extends AppCompatActivity {
 		postData_retrieveMsgs.put("WHERE", "chatid=" + chatId);
 		postData_retrieveMsgs.put("ORDER_BY", "dateTime");
 
+		ShouldSync.setShouldSyncMessages(true);
 		databaseOperations.retrieveMessages(postData_retrieveMsgs, new AfterJsonArrayResponseIsReceived() {
 			@Override
 			public void executeAfterResponse(JSONArray response) {

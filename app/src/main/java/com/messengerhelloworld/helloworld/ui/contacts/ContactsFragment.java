@@ -26,6 +26,7 @@ import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.adapters.ContactsAdapter;
 import com.messengerhelloworld.helloworld.interfaces.AfterJsonArrayResponseIsReceived;
 import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
+import com.messengerhelloworld.helloworld.utils.ShouldSync;
 
 import org.json.JSONArray;
 
@@ -50,6 +51,8 @@ public class ContactsFragment extends Fragment {
 							 @Nullable Bundle savedInstanceState) {
 
 		View contactsLayout = inflater.inflate(R.layout.fragment_contacts, container, false);
+		ShouldSync.setShouldSyncChats(false);
+		ShouldSync.setShouldSyncMessages(false);
 
 		progressBar = contactsLayout.findViewById(R.id.progressBar_fragmentContacts);
 		showMsg = contactsLayout.findViewById(R.id.showMsg_fragmentContacts);

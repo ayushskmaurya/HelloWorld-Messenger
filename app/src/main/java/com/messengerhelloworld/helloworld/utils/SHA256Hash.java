@@ -21,7 +21,7 @@ public class SHA256Hash {
 		}
 	}
 
-	public String getHash(String text) throws NoSuchAlgorithmException {
+	public static String getHash(String text) throws NoSuchAlgorithmException {
 		return generateHash(text);
 	}
 }

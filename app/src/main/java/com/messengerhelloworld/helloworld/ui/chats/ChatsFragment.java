@@ -20,6 +20,7 @@ import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.adapters.ChatsAdapter;
 import com.messengerhelloworld.helloworld.interfaces.AfterJsonArrayResponseIsReceived;
 import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
+import com.messengerhelloworld.helloworld.utils.ShouldSync;
 
 import org.json.JSONArray;
 
@@ -46,7 +47,7 @@ public class ChatsFragment extends Fragment {
 							 @Nullable Bundle savedInstanceState) {
 
 		View chatsLayout = inflater.inflate(R.layout.fragment_chats, container, false);
-		databaseOperations.setFLAG(false);
+		ShouldSync.setShouldSyncMessages(false);
 
 		chatsProgressBar = chatsLayout.findViewById(R.id.progressBar_fragmentChats);
 		chatsRecyclerView = chatsLayout.findViewById(R.id.chats_fragmentChats);
@@ -56,6 +57,7 @@ public class ChatsFragment extends Fragment {
 		HashMap<String, String> data = new HashMap<>();
 		data.put("userid", sp.getString("HelloWorldUserId", null));
 
+		ShouldSync.setShouldSyncChats(true);
 		databaseOperations.retrieveChats(data, new AfterJsonArrayResponseIsReceived() {
 			@Override
 			public void executeAfterResponse(JSONArray response) {

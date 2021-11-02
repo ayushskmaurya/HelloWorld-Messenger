@@ -22,14 +22,10 @@ public class DatabaseOperations {
 	private static final String TAG = "hwDatabaseOperations";
 	private final Activity activity;
 	private final Handler handler1 = new Handler();
-	private static boolean FLAG;
+	private final Handler handler2 = new Handler();
 
 	public DatabaseOperations(Activity activity) {
 		this.activity = activity;
-	}
-
-	public void setFLAG(boolean flag) {
-		FLAG = flag;
 	}
 
 	// Inserting new row in the database table.
@@ -37,7 +33,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						new Base().getBASE_URL() + "/insert.php",
+						Base.getBASE_URL() + "/insert.php",
 						response -> afterStringResponseIsReceived.executeAfterResponse(response),
 						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
 				) {
@@ -54,7 +50,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						new Base().getBASE_URL() + "/insertMessage.php",
+						Base.getBASE_URL() + "/insertMessage.php",
 						response -> afterStringResponseIsReceived.executeAfterResponse(response),
 						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
 				) {
@@ -71,7 +67,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						new Base().getBASE_URL() + "/retrieve.php",
+						Base.getBASE_URL() + "/retrieve.php",
 						response -> {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
@@ -95,7 +91,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						new Base().getBASE_URL() + "/retrieveChats.php",
+						Base.getBASE_URL() + "/retrieveChats.php",
 						response -> {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
@@ -103,12 +99,14 @@ public class DatabaseOperations {
 								Log.e(TAG, e.toString());
 							}
 							finally {
-								waitFor3Secs(data, afterJsonArrayResponseIsReceived);
+								if(ShouldSync.getShouldSyncChats())
+									syncChats(data, afterJsonArrayResponseIsReceived);
 							}
 						},
 						error -> {
 							afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString());
-							waitFor3Secs(data, afterJsonArrayResponseIsReceived);
+							if(ShouldSync.getShouldSyncChats())
+								syncChats(data, afterJsonArrayResponseIsReceived);
 						}
 				) {
 					@Override
@@ -118,7 +116,8 @@ public class DatabaseOperations {
 				}
 		);
 	}
-	private void waitFor3Secs(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
+	// Synchronising all the chats.
+	private void syncChats(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
 		handler1.postDelayed(new Runnable() {
 			@Override
 			public void run() {
@@ -132,7 +131,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						new Base().getBASE_URL() + "/retrieveContacts.php",
+						Base.getBASE_URL() + "/retrieveContacts.php",
 						response -> {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
@@ -151,15 +150,11 @@ public class DatabaseOperations {
 	}
 
 	// Retrieving messages.
-	private static HashMap<String, String> postData_retrieveMsgs;
-	private static AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived_retrieveMsgs;
 	public void retrieveMessages(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
-		postData_retrieveMsgs = data;
-		afterJsonArrayResponseIsReceived_retrieveMsgs = afterJsonArrayResponseIsReceived;
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						new Base().getBASE_URL() + "/retrieve.php",
+						Base.getBASE_URL() + "/retrieve.php",
 						response -> {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
@@ -167,12 +162,14 @@ public class DatabaseOperations {
 								Log.e(TAG, e.toString());
 							}
 							finally {
-								startStopRepeating();
+								if(ShouldSync.getShouldSyncMessages())
+									syncMessages(data, afterJsonArrayResponseIsReceived);
 							}
 						},
 						error -> {
 							afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString());
-							startStopRepeating();
+							if(ShouldSync.getShouldSyncMessages())
+								syncMessages(data, afterJsonArrayResponseIsReceived);
 						}
 				) {
 					@Override
@@ -182,17 +179,13 @@ public class DatabaseOperations {
 				}
 		);
 	}
-	private final Handler handler2 = new Handler();
-	private final Runnable runnable2 = new Runnable() {
-		@Override
-		public void run() {
-			retrieveMessages(postData_retrieveMsgs, afterJsonArrayResponseIsReceived_retrieveMsgs);
-		}
-	};
-	public void startStopRepeating() {
-		if(FLAG)
-			handler2.postDelayed(runnable2, 1000);
-		else
-			handler2.removeCallbacks(runnable2);
+	// Synchronising messages.
+	private void syncMessages(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
+		handler2.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				retrieveMessages(data, afterJsonArrayResponseIsReceived);
+			}
+		}, 3000);
 	}
 }
