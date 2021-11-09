@@ -79,8 +79,20 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 		});
 		try {
 			viewHolder.getUserName().setText(localDataSet.getJSONObject(position).getString("name"));
+
+			if(localDataSet.getJSONObject(position).getString("isNewMsg").equals("1")) {
+				viewHolder.getUserChat().setBackgroundColor(context.getResources().getColor(R.color.grey3));
+				viewHolder.getLastMsg().setTextColor(context.getResources().getColor(R.color.black));
+				viewHolder.getLastMsg().setTextSize(16);
+			}
 			viewHolder.getLastMsg().setText(localDataSet.getJSONObject(position).getString("message"));
-			viewHolder.getLastMsgTime().setText(localDataSet.getJSONObject(position).getString("dateTime").substring(11, 16));
+
+			try {
+				viewHolder.getLastMsgTime().setText(localDataSet.getJSONObject(position).getString("dateTime").substring(11, 16));
+			} catch (StringIndexOutOfBoundsException e) {
+				viewHolder.getLastMsgTime().setText("");
+			}
+
 		} catch (JSONException e) {
 			Log.e(TAG, e.toString());
 		}
