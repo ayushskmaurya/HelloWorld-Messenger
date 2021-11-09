@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,15 +18,20 @@ public class ChatAdapter extends RecyclerView.Adapter {
 	private static final String TAG = "hwChatAdapter";
 	private final JSONArray localDataSet;
 	private final String userid;
+	private String readReceipt;
 
 	public static class SentViewHolder extends RecyclerView.ViewHolder {
 		private final TextView sentMsg;
 		private final TextView sentMsgTime;
+		private final ImageView readReceiptSent;
+		private final ImageView readReceiptSeen;
 
 		public SentViewHolder(View view) {
 			super(view);
 			sentMsg = view.findViewById(R.id.msg_rowItemMessageSent);
 			sentMsgTime = view.findViewById(R.id.time_rowItemMessageSent);
+			readReceiptSent = view.findViewById(R.id.readReceiptSent_rowItemMessageSent);
+			readReceiptSeen = view.findViewById(R.id.readReceiptSeen_rowItemMessageSent);
 		}
 
 		public TextView getSentMsg() {
@@ -33,6 +39,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
 		}
 		public TextView getSentMsgTime() {
 			return sentMsgTime;
+		}
+		public ImageView getReadReceiptSent() {
+			return readReceiptSent;
+		}
+		public ImageView getReadReceiptSeen() {
+			return readReceiptSeen;
 		}
 	}
 
@@ -91,6 +103,15 @@ public class ChatAdapter extends RecyclerView.Adapter {
 			try {
 				vHolder.getSentMsg().setText(localDataSet.getJSONObject(position).getString("message"));
 				vHolder.getSentMsgTime().setText(localDataSet.getJSONObject(position).getString("dateTime").substring(11, 16));
+				readReceipt = localDataSet.getJSONObject(position).getString("isMsgSeen");
+				if(readReceipt.equals("1")) {
+					vHolder.getReadReceiptSent().setVisibility(View.GONE);
+					vHolder.getReadReceiptSeen().setVisibility(View.VISIBLE);
+				}
+				else if(readReceipt.equals("0")) {
+					vHolder.getReadReceiptSeen().setVisibility(View.GONE);
+					vHolder.getReadReceiptSent().setVisibility(View.VISIBLE);
+				}
 			} catch (JSONException e) {
 				Log.e(TAG, e.toString());
 			}

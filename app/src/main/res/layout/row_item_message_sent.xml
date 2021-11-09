@@ -33,11 +33,33 @@
             android:id="@+id/time_rowItemMessageSent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom"
             android:paddingStart="2dp"
-            android:paddingEnd="5dp"
+            android:paddingEnd="1dp"
             android:textColor="@color/grey4"
             android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/readReceiptSent_rowItemMessageSent"
+            android:layout_width="18sp"
+            android:layout_height="18sp"
+            android:layout_gravity="bottom"
+            android:contentDescription="@string/read_receipt_sent"
+            android:paddingStart="1dp"
+            android:paddingEnd="5dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/icon_read_receipt_sent" />
+
+        <ImageView
+            android:id="@+id/readReceiptSeen_rowItemMessageSent"
+            android:layout_width="18sp"
+            android:layout_height="18sp"
+            android:layout_gravity="bottom"
+            android:contentDescription="@string/read_receipt_seen"
+            android:paddingStart="1dp"
+            android:paddingEnd="5dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/icon_read_receipt_seen" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

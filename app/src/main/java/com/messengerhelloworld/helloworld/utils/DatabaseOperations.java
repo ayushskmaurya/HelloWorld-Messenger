@@ -154,7 +154,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						Base.getBASE_URL() + "/retrieve.php",
+						Base.getBASE_URL() + "/retrieveMessages.php",
 						response -> {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
@@ -186,6 +186,6 @@ public class DatabaseOperations {
 			public void run() {
 				retrieveMessages(data, afterJsonArrayResponseIsReceived);
 			}
-		}, 3000);
+		}, 1000);
 	}
 }

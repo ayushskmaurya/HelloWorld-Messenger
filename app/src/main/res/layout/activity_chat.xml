@@ -7,6 +7,19 @@
     android:background="@color/white"
     tools:context=".activities.ChatActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBar_activityChat"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/color1"
+        android:indeterminateTintMode="src_atop"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_activityChat"
         android:layout_width="match_parent"
@@ -15,7 +28,8 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/linearLayout"

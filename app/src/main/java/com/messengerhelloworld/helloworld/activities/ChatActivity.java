@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +32,11 @@ public class ChatActivity extends AppCompatActivity {
 	private static final String RECEIVER_USER_NAME = "com.messengerhelloworld.helloworld.receiverUserName";
 	private static final String RECEIVER_USER_ID = "com.messengerhelloworld.helloworld.receiverUserId";
 	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);
+	private ProgressBar chatProgressBar;
 	private RecyclerView chatRecyclerView;
 	private LinearLayoutManager linearLayoutManager;
 	private String chatId;
+	private String userMessages = null;
 	private HashMap<String, String> postData_retrieveMsgs;
 
 	@Override
@@ -51,28 +55,34 @@ public class ChatActivity extends AppCompatActivity {
 		getSupportActionBar().setTitle(receiverUserName);
 
 		// Retrieving messages.
+		chatProgressBar = findViewById(R.id.progressBar_activityChat);
 		chatRecyclerView = findViewById(R.id.chat_activityChat);
+		linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
+		linearLayoutManager.setStackFromEnd(true);
 
 		postData_retrieveMsgs = new HashMap<>();
-		postData_retrieveMsgs.put("columns", "senderid, message, dateTime");
-		postData_retrieveMsgs.put("table_name", "messages");
-		postData_retrieveMsgs.put("WHERE", "chatid=" + chatId);
-		postData_retrieveMsgs.put("ORDER_BY", "dateTime");
+		postData_retrieveMsgs.put("chatid", chatId);
+		postData_retrieveMsgs.put("userid", senderId);
 
 		ShouldSync.setShouldSyncMessages(true);
 		databaseOperations.retrieveMessages(postData_retrieveMsgs, new AfterJsonArrayResponseIsReceived() {
 			@Override
 			public void executeAfterResponse(JSONArray response) {
-				linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
-				linearLayoutManager.setStackFromEnd(true);
-				chatRecyclerView.setLayoutManager(linearLayoutManager);
-				ChatAdapter chatAdapter = new ChatAdapter(response, senderId);
-				chatRecyclerView.setAdapter(chatAdapter);
+				chatProgressBar.setVisibility(View.GONE);
+				chatRecyclerView.setVisibility(View.VISIBLE);
+				if(!String.valueOf(response).equals(userMessages)) {
+					chatRecyclerView.setLayoutManager(linearLayoutManager);
+					ChatAdapter chatAdapter = new ChatAdapter(response, senderId);
+					chatRecyclerView.setAdapter(chatAdapter);
+					userMessages = String.valueOf(response);
+				}
 			}
 
 			@Override
 			public void executeAfterErrorResponse(String error) {
 				Log.e(TAG, error);
+				chatRecyclerView.setVisibility(View.GONE);
+				chatProgressBar.setVisibility(View.VISIBLE);
 			}
 		});
 
@@ -93,7 +103,7 @@ public class ChatActivity extends AppCompatActivity {
 					@Override
 					public void executeAfterResponse(String response) {
 						chatId = response;
-						postData_retrieveMsgs.put("WHERE", "chatid=" + chatId);
+						postData_retrieveMsgs.put("chatid", chatId);
 					}
 
 					@Override
