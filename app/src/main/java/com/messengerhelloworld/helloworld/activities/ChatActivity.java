@@ -86,6 +86,10 @@ public class ChatActivity extends AppCompatActivity {
 			}
 		});
 
+		// Sending attachment.
+		ImageButton attachFile = findViewById(R.id.attachFile_activityChat);
+		attachFile.setOnClickListener(v -> startActivity(new Intent(this, AttachFileActivity.class)));
+
 		// Sending message.
 		TextView messageTextView = findViewById(R.id.msg_activityChat);
 		ImageButton sendMessage = findViewById(R.id.sendMsg_activityChat);

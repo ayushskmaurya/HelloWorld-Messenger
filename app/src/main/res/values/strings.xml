@@ -24,8 +24,16 @@
     <string name="no_chats_msg">No Chats to show!</string>
     <string name="no_chats_info">Tap the menu button to view Contacts and for more options.</string>
 
+    <string name="attached_file">Attached File</string>
+    <string name="cancel_uploading_file">Cancel Uploading File</string>
+    <string name="download_file">Download File</string>
+    <string name="read_receipt_sending">Sending</string>
     <string name="read_receipt_sent">Sent</string>
     <string name="read_receipt_seen">Seen</string>
     <string name="message">Message</string>
+    <string name="attach_file">Attach File</string>
     <string name="send_message">Send Message</string>
+
+    <string name="caption">Caption</string>
+    <string name="send_file">Send File</string>
 </resources>
