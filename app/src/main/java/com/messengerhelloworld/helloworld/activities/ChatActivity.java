@@ -1,6 +1,7 @@
 package com.messengerhelloworld.helloworld.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -118,5 +119,10 @@ public class ChatActivity extends AppCompatActivity {
 				});
 			}
 		});
+	}
+
+	@Override
+	public void onBackPressed() {
+		NavUtils.navigateUpFromSameTask(this);
 	}
 }

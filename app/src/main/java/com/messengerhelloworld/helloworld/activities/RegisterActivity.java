@@ -1,6 +1,7 @@
 package com.messengerhelloworld.helloworld.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -95,5 +96,10 @@ public class RegisterActivity extends AppCompatActivity {
 				});
 			}
 		});
+	}
+
+	@Override
+	public void onBackPressed() {
+		NavUtils.navigateUpFromSameTask(this);
 	}
 }
