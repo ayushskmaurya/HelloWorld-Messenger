@@ -12,11 +12,13 @@ import java.util.HashMap;
 import java.util.Map;
 import android.os.Handler;
 
+import com.messengerhelloworld.helloworld.interfaces.AfterJsonObjectResponseIsReceived;
 import com.messengerhelloworld.helloworld.interfaces.AfterStringResponseIsReceived;
 import com.messengerhelloworld.helloworld.interfaces.AfterJsonArrayResponseIsReceived;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DatabaseOperations {
 	private static final String TAG = "hwDatabaseOperations";
@@ -53,6 +55,29 @@ public class DatabaseOperations {
 						Base.getBASE_URL() + "/insertMessage.php",
 						response -> afterStringResponseIsReceived.executeAfterResponse(response),
 						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
+				) {
+					@Override
+					protected Map<String, String> getParams() {
+						return data;
+					}
+				}
+		);
+	}
+
+	// Inserting new caption in the database table.
+	public void insertCaption(HashMap<String, String> data, AfterJsonObjectResponseIsReceived afterJsonObjectResponseIsReceived) {
+		Volley.newRequestQueue(activity).add(
+				new StringRequest(
+						Request.Method.POST,
+						Base.getBASE_URL() + "/manageAttachment.php",
+						response -> {
+							try {
+								afterJsonObjectResponseIsReceived.executeAfterResponse(new JSONObject(response));
+							} catch (JSONException e) {
+								Log.e(TAG, e.toString());
+							}
+						},
+						error -> afterJsonObjectResponseIsReceived.executeAfterErrorResponse(error.toString())
 				) {
 					@Override
 					protected Map<String, String> getParams() {

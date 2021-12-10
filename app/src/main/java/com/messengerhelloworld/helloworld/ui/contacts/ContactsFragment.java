@@ -52,7 +52,6 @@ public class ContactsFragment extends Fragment {
 
 		View contactsLayout = inflater.inflate(R.layout.fragment_contacts, container, false);
 		ShouldSync.setShouldSyncChats(false);
-		ShouldSync.setShouldSyncMessages(false);
 
 		progressBar = contactsLayout.findViewById(R.id.progressBar_fragmentContacts);
 		showMsg = contactsLayout.findViewById(R.id.showMsg_fragmentContacts);

@@ -1,5 +1,7 @@
 package com.messengerhelloworld.helloworld.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -36,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
 	private ProgressBar chatProgressBar;
 	private RecyclerView chatRecyclerView;
 	private LinearLayoutManager linearLayoutManager;
-	private String chatId;
+	private String chatId, receiverId;
 	private String userMessages = null;
 	private HashMap<String, String> postData_retrieveMsgs;
 
@@ -49,7 +52,7 @@ public class ChatActivity extends AppCompatActivity {
 		Intent intent = getIntent();
 		chatId = intent.getStringExtra(CHAT_ID);
 		String receiverUserName = intent.getStringExtra(RECEIVER_USER_NAME);
-		String receiverId = intent.getStringExtra(RECEIVER_USER_ID);
+		receiverId = intent.getStringExtra(RECEIVER_USER_ID);
 		SharedPreferences sp = getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 		String senderId = sp.getString("HelloWorldUserId", null);
 
@@ -89,7 +92,12 @@ public class ChatActivity extends AppCompatActivity {
 
 		// Sending attachment.
 		ImageButton attachFile = findViewById(R.id.attachFile_activityChat);
-		attachFile.setOnClickListener(v -> startActivity(new Intent(this, AttachFileActivity.class)));
+		attachFile.setOnClickListener(v -> {
+			Intent intent2 = new Intent(this, AttachFileActivity.class);
+			intent2.putExtra(CHAT_ID, chatId);
+			intent2.putExtra(RECEIVER_USER_ID, receiverId);
+			startActivityForResult(intent2, 2);
+		});
 
 		// Sending message.
 		TextView messageTextView = findViewById(R.id.msg_activityChat);
@@ -122,7 +130,28 @@ public class ChatActivity extends AppCompatActivity {
 	}
 
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 2 && resultCode == RESULT_OK) {
+			chatId = data.getStringExtra(CHAT_ID);
+			postData_retrieveMsgs.put("chatid", chatId);
+		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				ShouldSync.setShouldSyncMessages(false);
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
 	public void onBackPressed() {
+		ShouldSync.setShouldSyncMessages(false);
 		NavUtils.navigateUpFromSameTask(this);
 	}
 }
