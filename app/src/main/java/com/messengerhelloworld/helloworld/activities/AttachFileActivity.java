@@ -11,8 +11,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -67,8 +69,10 @@ public class AttachFileActivity extends AppCompatActivity {
 
 		if(requestCode == 1 && resultCode == RESULT_OK) {
 			Uri filepath = data.getData();
-			String path = filepath.getPath();
-			String filename = path.substring(path.lastIndexOf('/')+1);
+			Cursor cursor = getContentResolver().query(filepath, null, null, null, null);
+			int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+			cursor.moveToFirst();
+			String filename = cursor.getString(nameIndex);
 
 			// Sending caption.
 			TextView captionTextView = findViewById(R.id.caption_activityAttachFile);
