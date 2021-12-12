@@ -31,7 +31,7 @@ import org.json.JSONArray;
 import java.util.HashMap;
 
 public class ChatActivity extends AppCompatActivity {
-	private static final String TAG = "hwChatActivity";
+	private static final String TAG = "hwmLogChatActivity";
 	private static final String CHAT_ID = "com.messengerhelloworld.helloworld.chatId";
 	private static final String RECEIVER_USER_NAME = "com.messengerhelloworld.helloworld.receiverUserName";
 	private static final String RECEIVER_USER_ID = "com.messengerhelloworld.helloworld.receiverUserId";

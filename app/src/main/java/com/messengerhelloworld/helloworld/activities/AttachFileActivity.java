@@ -33,7 +33,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class AttachFileActivity extends AppCompatActivity {
-	private static final String TAG = "hwAttachFileActivity";
+	private static final String TAG = "hwmLogAttachFileActivity";
 	private static final String CHAT_ID = "com.messengerhelloworld.helloworld.chatId";
 	private static final String RECEIVER_USER_ID = "com.messengerhelloworld.helloworld.receiverUserId";
 	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);

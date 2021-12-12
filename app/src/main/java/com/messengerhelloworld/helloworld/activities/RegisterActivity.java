@@ -23,7 +23,7 @@ import org.json.JSONException;
 import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
-	private static final String TAG = "hwRegisterActivity";
+	private static final String TAG = "hwmLogRegisterActivity";
 	private static final String REGISTERED_NAME = "com.messengerhelloworld.helloworld.registeredName";
 	private static final String REGISTERED_MOBILE_NO = "com.messengerhelloworld.helloworld.registeredMobileNo";
 	private static final String REGISTERED_PASSWORD_HASH = "com.messengerhelloworld.helloworld.registeredPasswordHash";

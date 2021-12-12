@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import com.messengerhelloworld.helloworld.interfaces.AfterOtpIsEntered;
 
 public class OtpVerification {
-	private static final String TAG = "hwOtpVerification";
+	private static final String TAG = "hwmLogOtpVerification";
 	private final FirebaseAuth mAuth;
 	private final Activity activity;
 	private String verification_id;

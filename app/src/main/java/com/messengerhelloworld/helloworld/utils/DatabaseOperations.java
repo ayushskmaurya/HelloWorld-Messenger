@@ -21,7 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DatabaseOperations {
-	private static final String TAG = "hwDatabaseOperations";
+	private static final String TAG = "hwmLogDatabaseOperations";
 	private final Activity activity;
 	private final Handler handler1 = new Handler();
 	private final Handler handler2 = new Handler();

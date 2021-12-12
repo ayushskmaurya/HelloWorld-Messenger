@@ -43,7 +43,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-    private static final String TAG = "hwMainActivity";
+    private static final String TAG = "hwmLogMainActivity";
     private final DatabaseHandler databaseHandler = new DatabaseHandler(this, "helloworld", null, 1);
     private final Handler handler = new Handler();
     private static boolean shouldUploadAttachments = true;

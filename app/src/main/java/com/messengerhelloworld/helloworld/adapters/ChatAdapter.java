@@ -31,7 +31,7 @@ import org.json.JSONException;
 import java.util.HashMap;
 
 public class ChatAdapter extends RecyclerView.Adapter {
-	private static final String TAG = "hwChatAdapter";
+	private static final String TAG = "hwmLogChatAdapter";
 	private final JSONArray localDataSet;
 	private final String userid;
 	private final Activity activity;

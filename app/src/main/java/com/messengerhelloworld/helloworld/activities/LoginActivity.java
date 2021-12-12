@@ -26,7 +26,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
-	private static final String TAG = "hwLoginActivity";
+	private static final String TAG = "hwmLogLoginActivity";
 	private final DatabaseOperations databaseOperations = new DatabaseOperations(this);
 
 	@Override

@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ContactsFragment extends Fragment {
-	private static final String TAG = "hwContactsFragment";
+	private static final String TAG = "hwmLogContactsFragment";
 	private Context context;
 	private ProgressBar progressBar;
 	private String msg;

@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
-	private static final String TAG = "hwChatsAdapter";
+	private static final String TAG = "hwmLogChatsAdapter";
 	private static final String CHAT_ID = "com.messengerhelloworld.helloworld.chatId";
 	private static final String RECEIVER_USER_NAME = "com.messengerhelloworld.helloworld.receiverUserName";
 	private static final String RECEIVER_USER_ID = "com.messengerhelloworld.helloworld.receiverUserId";
