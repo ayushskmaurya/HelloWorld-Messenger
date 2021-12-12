@@ -213,4 +213,21 @@ public class DatabaseOperations {
 			}
 		}, 1000);
 	}
+
+	// Cancel Uploading Attachment.
+	public void cancelUploadingAttachment(HashMap<String, String> data, AfterStringResponseIsReceived afterStringResponseIsReceived) {
+		Volley.newRequestQueue(activity).add(
+				new StringRequest(
+						Request.Method.POST,
+						Base.getBASE_URL() + "/manageAttachment.php",
+						response -> afterStringResponseIsReceived.executeAfterResponse(response),
+						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
+				) {
+					@Override
+					protected Map<String, String> getParams() {
+						return data;
+					}
+				}
+		);
+	}
 }

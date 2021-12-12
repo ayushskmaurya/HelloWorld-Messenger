@@ -1,5 +1,12 @@
 package com.messengerhelloworld.helloworld.adapters;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,18 +14,29 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.messengerhelloworld.helloworld.R;
+import com.messengerhelloworld.helloworld.interfaces.AfterStringResponseIsReceived;
+import com.messengerhelloworld.helloworld.utils.Base;
+import com.messengerhelloworld.helloworld.utils.DatabaseHandler;
+import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.util.HashMap;
 
 public class ChatAdapter extends RecyclerView.Adapter {
 	private static final String TAG = "hwChatAdapter";
 	private final JSONArray localDataSet;
 	private final String userid;
+	private final Activity activity;
+	private DatabaseOperations databaseOperations;
+	private final DatabaseHandler databaseHandler;
 	private String readReceipt;
 
 	public static class SentViewHolder extends RecyclerView.ViewHolder {
@@ -154,9 +172,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
 		}
 	}
 
-	public ChatAdapter(JSONArray dataSet, String userid) {
+	public ChatAdapter(JSONArray dataSet, String userid, Activity activity) {
 		localDataSet = dataSet;
 		this.userid = userid;
+		this.activity = activity;
+		databaseOperations = new DatabaseOperations(this.activity);
+		databaseHandler = new DatabaseHandler(this.activity, "helloworld", null, 1);
 	}
 
 	@Override
@@ -268,6 +289,17 @@ public class ChatAdapter extends RecyclerView.Adapter {
 						vHolder.getReadReceiptFileSeen().setVisibility(View.GONE);
 						vHolder.getReadReceiptFileSent().setVisibility(View.VISIBLE);
 					}
+
+					vHolder.getDownloadSentFile().setOnClickListener(v -> {
+						try {
+							downloadFile(
+									localDataSet.getJSONObject(position).getString("msgid"),
+									localDataSet.getJSONObject(position).getString("filename")
+							);
+						} catch (JSONException e) {
+							Log.e(TAG, e.toString());
+						}
+					});
 				}
 				else {
 					vHolder.getDownloadSentFile().setVisibility(View.GONE);
@@ -276,6 +308,29 @@ public class ChatAdapter extends RecyclerView.Adapter {
 					vHolder.getReadReceiptFileSent().setVisibility(View.GONE);
 					vHolder.getReadReceiptFileSeen().setVisibility(View.GONE);
 					vHolder.getReadReceiptFileSending().setVisibility(View.VISIBLE);
+
+					vHolder.getCancelUpload().setOnClickListener(v -> {
+						HashMap<String, String> data = new HashMap<>();
+						try {
+							String msgid = localDataSet.getJSONObject(position).getString("msgid");
+							data.put("whatToDo", "cancelUpload");
+							data.put("msgid", msgid);
+							databaseOperations.cancelUploadingAttachment(data, new AfterStringResponseIsReceived() {
+								@Override
+								public void executeAfterResponse(String response) {
+									if(response.equals("1"))
+										databaseHandler.deleteAttachment(msgid);
+								}
+
+								@Override
+								public void executeAfterErrorResponse(String error) {
+									Log.e(TAG, error);
+								}
+							});
+						} catch (JSONException e) {
+							Log.e(TAG, e.toString());
+						}
+					});
 				}
 			} catch (JSONException e) {
 				Log.e(TAG, e.toString());
@@ -288,6 +343,17 @@ public class ChatAdapter extends RecyclerView.Adapter {
 				vHolder.getReceivedFilename().setText(localDataSet.getJSONObject(position).getString("filename"));
 				vHolder.getReceivedCaption().setText(localDataSet.getJSONObject(position).getString("message"));
 				vHolder.getReceivedCaptionTime().setText(localDataSet.getJSONObject(position).getString("dateTime").substring(11, 16));
+
+				vHolder.getDownloadReceivedFile().setOnClickListener(v -> {
+					try {
+						downloadFile(
+								localDataSet.getJSONObject(position).getString("msgid"),
+								localDataSet.getJSONObject(position).getString("filename")
+						);
+					} catch (JSONException e) {
+						Log.e(TAG, e.toString());
+					}
+				});
 			} catch (JSONException e) {
 				Log.e(TAG, e.toString());
 			}
@@ -297,5 +363,20 @@ public class ChatAdapter extends RecyclerView.Adapter {
 	@Override
 	public int getItemCount() {
 		return localDataSet.length();
+	}
+
+	private void downloadFile(String msgid, String filename) {
+		if(ContextCompat.checkSelfPermission(activity,
+				Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+			DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
+			Uri uri = Uri.parse(Base.getBASE_URL() + "/manageAttachment.php?whatToDo=downloadFile&msgid=" + msgid);
+			DownloadManager.Request request = new DownloadManager.Request(uri);
+			request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+			request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+			downloadManager.enqueue(request);
+		}
+		else
+			Toast.makeText(activity, "Please grant permission to Write External Storage.", Toast.LENGTH_SHORT).show();
 	}
 }

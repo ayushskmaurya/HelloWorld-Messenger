@@ -76,7 +76,7 @@ public class ChatActivity extends AppCompatActivity {
 				chatRecyclerView.setVisibility(View.VISIBLE);
 				if(!String.valueOf(response).equals(userMessages)) {
 					chatRecyclerView.setLayoutManager(linearLayoutManager);
-					ChatAdapter chatAdapter = new ChatAdapter(response, senderId);
+					ChatAdapter chatAdapter = new ChatAdapter(response, senderId, ChatActivity.this);
 					chatRecyclerView.setAdapter(chatAdapter);
 					userMessages = String.valueOf(response);
 				}

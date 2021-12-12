@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
             // Permissions
             String[] permissionsRequired = {
                     Manifest.permission.READ_CONTACTS,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
             };
             ArrayList<String> permissions = new ArrayList<>();
             for(String permission : permissionsRequired)
