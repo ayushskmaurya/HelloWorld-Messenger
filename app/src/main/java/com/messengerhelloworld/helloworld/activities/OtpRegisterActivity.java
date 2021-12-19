@@ -27,7 +27,7 @@ import com.messengerhelloworld.helloworld.interfaces.AfterStringResponseIsReceiv
 import java.util.HashMap;
 
 public class OtpRegisterActivity extends AppCompatActivity {
-	private static final String TAG = "hwmLogOtpRegisterActivity";
+	private static final String TAG = "hwmLogOtpRegister";
 	private static final String REGISTERED_NAME = "com.messengerhelloworld.helloworld.registeredName";
 	private static final String REGISTERED_MOBILE_NO = "com.messengerhelloworld.helloworld.registeredMobileNo";
 	private static final String REGISTERED_PASSWORD_HASH = "com.messengerhelloworld.helloworld.registeredPasswordHash";

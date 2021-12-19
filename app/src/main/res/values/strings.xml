@@ -18,11 +18,28 @@
 
     <string name="menu_chats">Chats</string>
     <string name="menu_contacts">Contacts</string>
+    <string name="menu_about_helloworld">About HelloWorld</string>
     <string name="menu_logout">Logout</string>
 
     <string name="user_profile_img">User Profile Image</string>
     <string name="no_chats_msg">No Chats to show!</string>
     <string name="no_chats_info">Tap the menu button to view Contacts and for more options.</string>
+
+    <string name="messenger">HelloWorld Messenger</string>
+    <string name="developer">Developed by: Ayushkumar Maurya</string>
+    <string name="about_info1">
+        1. HelloWorld Messenger helps you connect with your closed ones and business acquaintances.\n
+        2. It is an efficient and easy-to-use Android Chat application.\n
+        3. This application is created using Java for Android app and PHP, MySQL for the server.\n
+        4. Firebase Authentication is used to verify phone number.\n
+        5. User will be able to login simultaneously on multiple Android devices.\n
+        6. Since, all the files &amp; chats of the user is stored in server, user do not have to worry about taking backups.
+    </string>
+    <string name="about_info2">GitHub Repositories Links:</string>
+    <string name="about_info3">
+        1. https://github.com/ayushskmaurya/HelloWorld-Messenger\n
+        2. https://github.com/ayushskmaurya/HelloWorld-Server
+    </string>
 
     <string name="attached_file">Attached File</string>
     <string name="cancel_uploading_file">Cancel Uploading File</string>

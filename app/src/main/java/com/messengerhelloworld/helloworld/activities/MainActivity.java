@@ -43,7 +43,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-    private static final String TAG = "hwmLogMainActivity";
+    private static final String TAG = "hwmLogMain";
     private final DatabaseHandler databaseHandler = new DatabaseHandler(this, "helloworld", null, 1);
     private final Handler handler = new Handler();
     private static boolean shouldUploadAttachments = true;
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             NavigationView navigationView = binding.navView;
 
             mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_chats, R.id.nav_contacts)
+                    R.id.nav_chats, R.id.nav_contacts, R.id.nav_about_helloworld)
                     .setDrawerLayout(drawer)
                     .build();
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);

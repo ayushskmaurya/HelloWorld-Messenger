@@ -27,7 +27,7 @@ import org.json.JSONArray;
 import java.util.HashMap;
 
 public class ChatsFragment extends Fragment {
-	private static final String TAG = "hwmLogChatsFragment";
+	private static final String TAG = "hwmLogChats";
 	private Context context;
 	private DatabaseOperations databaseOperations;
 	private ProgressBar chatsProgressBar;
