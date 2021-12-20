@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
 				login.setEnabled(false);
 				progressBar.setVisibility(View.VISIBLE);
 				HashMap<String, String> data = new HashMap<>();
-				data.put("columns", "userid, name, password");
+				data.put("columns", "userid, name, password, profile_image");
 				data.put("table_name", "users");
 				data.put("WHERE", "mobile_no='" + mob + "'");
 
@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
 									ed.putString("HelloWorldUserId", user.getString("userid"));
 									ed.putString("HelloWorldUserName", user.getString("name"));
 									ed.putString("HelloWorldUserMobileNo", mob);
+									ed.putString("HelloWorldUserProfilePhoto", user.getString("profile_image"));
 									ed.apply();
 
 									Intent intent = new Intent(LoginActivity.this, MainActivity.class);

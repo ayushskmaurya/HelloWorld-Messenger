@@ -89,6 +89,7 @@ public class OtpRegisterActivity extends AppCompatActivity {
 								ed.putString("HelloWorldUserId", response);
 								ed.putString("HelloWorldUserName", name);
 								ed.putString("HelloWorldUserMobileNo", mob);
+								ed.putString("HelloWorldUserProfilePhoto", "null");
 								ed.apply();
 
 								intent1.removeExtra(REGISTERED_MOBILE_NO);

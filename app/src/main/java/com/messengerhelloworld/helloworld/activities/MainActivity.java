@@ -12,7 +12,9 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -109,6 +111,23 @@ public class MainActivity extends AppCompatActivity {
             if(shouldUploadAttachments) {
                 shouldUploadAttachments = false;
                 uploadAttachmentsToServer();
+            }
+
+            // Displaying user's Profile Photo.
+            ImageView profilePhotoView = headerView.findViewById(R.id.profilePhoto);
+            if(sp.getString("HelloWorldUserProfilePhoto", null).equals("null")) {
+                profilePhotoView.setScaleType(ImageView.ScaleType.CENTER);
+                profilePhotoView.setImageResource(R.drawable.icon_add_image);
+                profilePhotoView.setOnClickListener(v -> {
+                    if(ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        Intent intentProfileImage = new Intent(this, ProfileImageActivity.class);
+                        startActivity(intentProfileImage);
+                    }
+                    else
+                        Toast.makeText(this, "Please grant permission to Read External Storage.", Toast.LENGTH_SHORT).show();
+
+                });
             }
         }
     }

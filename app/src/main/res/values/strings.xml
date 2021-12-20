@@ -16,6 +16,10 @@
     <string name="sendOtp">OTP</string>
     <string name="verify">Verify</string>
 
+    <string name="back_button">Back Button</string>
+    <string name="edit_button">Edit Button</string>
+    <string name="add_image">Add Image</string>
+
     <string name="menu_chats">Chats</string>
     <string name="menu_contacts">Contacts</string>
     <string name="menu_about_helloworld">About HelloWorld</string>

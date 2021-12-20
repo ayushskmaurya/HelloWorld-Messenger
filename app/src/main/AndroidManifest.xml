@@ -27,6 +27,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.ProfileImageActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.HelloWorld.NoActionBar" />
+        <activity
             android:name=".activities.ChatActivity"
             android:label=""
             android:parentActivityName=".activities.MainActivity"
