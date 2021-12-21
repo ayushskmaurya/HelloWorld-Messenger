@@ -1,17 +1,20 @@
 package com.messengerhelloworld.helloworld.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.activities.ChatActivity;
+import com.messengerhelloworld.helloworld.utils.DisplayProfileImage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +32,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 		private final TextView userName;
 		private final TextView lastMsg;
 		private final TextView lastMsgTime;
+		private final ImageView profileImg;
 
 		public ViewHolder(View view) {
 			super(view);
@@ -36,6 +40,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 			userName = view.findViewById(R.id.name_rowItemChats);
 			lastMsg = view.findViewById(R.id.lastMsg_rowItemChats);
 			lastMsgTime = view.findViewById(R.id.lastMsgTime_rowItemChats);
+			profileImg = view.findViewById(R.id.profileImg_rowItemChats);
 		}
 
 		public View getUserChat() {
@@ -49,6 +54,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 		}
 		public TextView getLastMsgTime() {
 			return lastMsgTime;
+		}
+		public ImageView getProfileImg() {
+			return profileImg;
 		}
 	}
 
@@ -92,6 +100,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 			} catch (StringIndexOutOfBoundsException e) {
 				viewHolder.getLastMsgTime().setText("");
 			}
+
+			String profileImgName = localDataSet.getJSONObject(position).getString("profile_image");
+			if(!profileImgName.equals("null"))
+				DisplayProfileImage.display((Activity) context, profileImgName, viewHolder.getProfileImg());
 
 		} catch (JSONException e) {
 			Log.e(TAG, e.toString());

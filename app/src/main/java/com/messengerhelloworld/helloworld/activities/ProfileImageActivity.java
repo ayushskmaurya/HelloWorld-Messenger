@@ -65,9 +65,8 @@ public class ProfileImageActivity extends AppCompatActivity {
 
 				int imageSize = Math.min(bitmap.getWidth(), bitmap.getHeight());
 				Bitmap croppedImage = Bitmap.createBitmap(bitmap, 0, 0, imageSize, imageSize);
-				Bitmap scaledImage = Bitmap.createScaledBitmap(croppedImage, 60, 60, true);
 
-				encodeProfilePhoto(sp.getString("HelloWorldUserId", null), croppedImage, scaledImage);
+				encodeProfilePhoto(sp.getString("HelloWorldUserId", null), croppedImage);
 			} catch (FileNotFoundException e) {
 				Log.e(TAG, e.toString());
 				Toast.makeText(this, "Unable to set profile photo, please try again.", Toast.LENGTH_SHORT).show();
@@ -78,21 +77,22 @@ public class ProfileImageActivity extends AppCompatActivity {
 	}
 
 	// Encoding profile image to String.
-	private void encodeProfilePhoto(String userid, Bitmap croppedImage, Bitmap scaledImage) {
+	private void encodeProfilePhoto(String userid, Bitmap profileImage) {
 		ByteArrayOutputStream byteArrayOutputStream1 = new ByteArrayOutputStream();
 		ByteArrayOutputStream byteArrayOutputStream2 = new ByteArrayOutputStream();
-		croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream1);
-		scaledImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream2);
+		profileImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream1);
+		profileImage.compress(Bitmap.CompressFormat.JPEG, 0, byteArrayOutputStream2);
 
 		byte[] bytesOfFile1 = byteArrayOutputStream1.toByteArray();
 		byte[] bytesOfFile2 = byteArrayOutputStream2.toByteArray();
-		String encodedCroppedImage = android.util.Base64.encodeToString(bytesOfFile1, Base64.DEFAULT);
-		String encodedScaledImage = android.util.Base64.encodeToString(bytesOfFile2, Base64.DEFAULT);
+		String encodedProfileImage = android.util.Base64.encodeToString(bytesOfFile1, Base64.DEFAULT);
+		String encodedLowQualityProfileImage = android.util.Base64.encodeToString(bytesOfFile2, Base64.DEFAULT);
 
 		Map<String, String> postData = new HashMap<>();
+		postData.put("whatToDo", "saveProfileImage");
 		postData.put("userid", userid);
-		postData.put("profile_image", encodedCroppedImage);
-		postData.put("reduced_profile_image", encodedScaledImage);
+		postData.put("profile_image", encodedProfileImage);
+		postData.put("reduced_profile_image", encodedLowQualityProfileImage);
 		uploadProfilePhotoToServer(postData);
 	}
 
@@ -101,8 +101,12 @@ public class ProfileImageActivity extends AppCompatActivity {
 		Volley.newRequestQueue(this).add(
 				new StringRequest(
 						Request.Method.POST,
-						Base.getBASE_URL() + "/saveProfileImage.php",
-						response -> Log.d(TAG, response),
+						Base.getBaseUrl() + "/manageProfileImage.php",
+						response -> {
+							SharedPreferences.Editor ed = sp.edit();
+							ed.putString("HelloWorldUserProfilePhoto", response);
+							ed.apply();
+						},
 						error -> {
 							Log.e(TAG, error.toString());
 							Toast.makeText(this, "Unable to set profile photo, please try again.", Toast.LENGTH_SHORT).show();

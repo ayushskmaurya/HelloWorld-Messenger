@@ -35,7 +35,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						Base.getBASE_URL() + "/insert.php",
+						Base.getBaseUrl() + "/insert.php",
 						response -> afterStringResponseIsReceived.executeAfterResponse(response),
 						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
 				) {
@@ -52,7 +52,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						Base.getBASE_URL() + "/insertMessage.php",
+						Base.getBaseUrl() + "/insertMessage.php",
 						response -> afterStringResponseIsReceived.executeAfterResponse(response),
 						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
 				) {
@@ -69,7 +69,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						Base.getBASE_URL() + "/manageAttachment.php",
+						Base.getBaseUrl() + "/manageAttachment.php",
 						response -> {
 							try {
 								afterJsonObjectResponseIsReceived.executeAfterResponse(new JSONObject(response));
@@ -92,7 +92,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						Base.getBASE_URL() + "/retrieve.php",
+						Base.getBaseUrl() + "/retrieve.php",
 						response -> {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
@@ -116,7 +116,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						Base.getBASE_URL() + "/retrieveChats.php",
+						Base.getBaseUrl() + "/retrieveChats.php",
 						response -> {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
@@ -156,7 +156,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						Base.getBASE_URL() + "/retrieveContacts.php",
+						Base.getBaseUrl() + "/retrieveContacts.php",
 						response -> {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
@@ -179,7 +179,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						Base.getBASE_URL() + "/retrieveMessages.php",
+						Base.getBaseUrl() + "/retrieveMessages.php",
 						response -> {
 							try {
 								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
@@ -219,7 +219,7 @@ public class DatabaseOperations {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,
-						Base.getBASE_URL() + "/manageAttachment.php",
+						Base.getBaseUrl() + "/manageAttachment.php",
 						response -> afterStringResponseIsReceived.executeAfterResponse(response),
 						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
 				) {

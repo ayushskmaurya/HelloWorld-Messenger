@@ -34,6 +34,8 @@ import com.messengerhelloworld.helloworld.databinding.ActivityMainBinding;
 import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.utils.Base;
 import com.messengerhelloworld.helloworld.utils.DatabaseHandler;
+import com.messengerhelloworld.helloworld.utils.DisplayProfileImage;
+import com.messengerhelloworld.helloworld.utils.ManageFolders;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -107,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         permissions.toArray(new String[permissions.size()]), 1);
 
+            // Creating all the required folders.
+            ManageFolders.createFoldersForProfileImages();
+
             // Starting to upload all the pending attachments to server.
             if(shouldUploadAttachments) {
                 shouldUploadAttachments = false;
@@ -114,8 +119,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Displaying user's Profile Photo.
+            String profilePhotoName = sp.getString("HelloWorldUserProfilePhoto", null);
             ImageView profilePhotoView = headerView.findViewById(R.id.profilePhoto);
-            if(sp.getString("HelloWorldUserProfilePhoto", null).equals("null")) {
+            if(profilePhotoName.equals("null")) {
                 profilePhotoView.setScaleType(ImageView.ScaleType.CENTER);
                 profilePhotoView.setImageResource(R.drawable.icon_add_image);
                 profilePhotoView.setOnClickListener(v -> {
@@ -126,9 +132,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else
                         Toast.makeText(this, "Please grant permission to Read External Storage.", Toast.LENGTH_SHORT).show();
-
                 });
             }
+            else
+                DisplayProfileImage.display(this, profilePhotoName, profilePhotoView);
         }
     }
 
@@ -176,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(
                 new StringRequest(
                         Request.Method.POST,
-                        Base.getBASE_URL() + "/manageAttachment.php",
+                        Base.getBaseUrl() + "/manageAttachment.php",
                         response -> {
                             if(response.equals("1"))
                                 databaseHandler.deleteAttachment(postData.get("msgid"));

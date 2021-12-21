@@ -370,7 +370,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
 				Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
 			DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
-			Uri uri = Uri.parse(Base.getBASE_URL() + "/manageAttachment.php?whatToDo=downloadFile&msgid=" + msgid);
+			Uri uri = Uri.parse(Base.getBaseUrl() + "/manageAttachment.php?whatToDo=downloadFile&msgid=" + msgid);
 			DownloadManager.Request request = new DownloadManager.Request(uri);
 			request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 			request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);

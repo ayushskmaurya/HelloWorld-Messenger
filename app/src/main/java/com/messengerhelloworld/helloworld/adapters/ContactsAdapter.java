@@ -1,17 +1,20 @@
 package com.messengerhelloworld.helloworld.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.activities.ChatActivity;
+import com.messengerhelloworld.helloworld.utils.DisplayProfileImage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,11 +30,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private final View contact;
 		private final TextView userName;
+		private final ImageView profileImg;
 
 		public ViewHolder(View view) {
 			super(view);
 			contact = view.findViewById(R.id.contact_rowItemContacts);
 			userName = view.findViewById(R.id.userName_rowItemContacts);
+			profileImg = view.findViewById(R.id.profileImg_rowItemContacts);
 		}
 
 		public View getContact() {
@@ -39,6 +44,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 		}
 		public TextView getUserName() {
 			return userName;
+		}
+		public ImageView getProfileImg() {
+			return profileImg;
 		}
 	}
 
@@ -69,6 +77,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 		});
 		try {
 			viewHolder.getUserName().setText(localDataSet.getJSONObject(position).getString("name"));
+
+			String profileImgName = localDataSet.getJSONObject(position).getString("profile_image");
+			if(!profileImgName.equals("null"))
+				DisplayProfileImage.display((Activity) context, profileImgName, viewHolder.getProfileImg());
+
 		} catch (JSONException e) {
 			Log.e(TAG, e.toString());
 		}
