@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ProfileImageActivity"
+            android:name=".activities.ViewProfileImageActivity"
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.HelloWorld.NoActionBar" />

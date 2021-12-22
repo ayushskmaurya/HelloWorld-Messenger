@@ -18,19 +18,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String create = "CREATE TABLE attachments (" +
+		String createAttachmentsTable = "CREATE TABLE attachments (" +
 			"id INTEGER PRIMARY KEY AUTOINCREMENT," +
 			"msgid VARCHAR(100) UNIQUE NOT NULL," +
 			"temp_filename VARCHAR(100) NOT NULL," +
 			"filepath TEXT NOT NULL" +
 		")";
-		db.execSQL(create);
+
+		String createLastDeletedProfileImages = "CREATE TABLE last_deleted_profile_images (" +
+			"date_time TEXT" +
+		")";
+
+		db.execSQL(createAttachmentsTable);
+		db.execSQL(createLastDeletedProfileImages);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		String drop = String.valueOf("DROP TABLE IF EXISTS");
-		db.execSQL(drop, new String[]{"attachments"});
+		db.execSQL(drop, new String[]{"attachments", "last_deleted_profile_images"});
 		onCreate(db);
 	}
 
@@ -72,5 +78,53 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		int count = cursor.getCount();
 		db.close();
 		return count;
+	}
+
+
+	public void insertLastDeletedProfileImagesDateTime(LastDeletedProfileImages lastDeletedProfileImages) {
+		if(getLastDeletedProfileImagesCount() == 0) {
+			SQLiteDatabase db = this.getWritableDatabase();
+			ContentValues values = new ContentValues();
+			values.put("date_time", lastDeletedProfileImages.getDate_time());
+			db.insert("last_deleted_profile_images", null, values);
+			db.close();
+		}
+	}
+
+	public int getDifferenceBetweenDateTime() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor1 = db.query("last_deleted_profile_images",
+				null, null, null, null, null, null);
+		String lastDeletedDateTime = (cursor1 != null && cursor1.moveToFirst()) ? cursor1.getString(0) : "0";
+		String sql = "SELECT strftime('%s', 'now') - " + lastDeletedDateTime;
+		Cursor cursor2 = db.rawQuery(sql, null);
+		String difference = (cursor2 != null && cursor2.moveToFirst()) ? cursor2.getString(0) : "0";
+		db.close();
+		return Integer.parseInt(difference);
+	}
+
+	public void updateLastDeletedProfileImagesDateTime(String currentDateTime) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put("date_time", currentDateTime);
+		db.update("last_deleted_profile_images", values, null, null);
+		db.close();
+	}
+
+	public int getLastDeletedProfileImagesCount() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.query("last_deleted_profile_images",
+				null, null, null, null, null, null);
+		int count = cursor.getCount();
+		db.close();
+		return count;
+	}
+
+	public String getCurrentDateTime() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery("SELECT strftime('%s', 'now')", null);
+		String currentDateTime = (cursor != null && cursor.moveToFirst()) ? cursor.getString(0) : "0";
+		db.close();
+		return currentDateTime;
 	}
 }

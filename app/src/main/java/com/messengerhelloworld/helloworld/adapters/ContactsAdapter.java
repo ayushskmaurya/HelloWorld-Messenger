@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.activities.ChatActivity;
+import com.messengerhelloworld.helloworld.activities.ViewProfileImageActivity;
 import com.messengerhelloworld.helloworld.utils.DisplayProfileImage;
 
 import org.json.JSONArray;
@@ -24,8 +25,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 	private static final String CHAT_ID = "com.messengerhelloworld.helloworld.chatId";
 	private static final String RECEIVER_USER_NAME = "com.messengerhelloworld.helloworld.receiverUserName";
 	private static final String RECEIVER_USER_ID = "com.messengerhelloworld.helloworld.receiverUserId";
+	private static final String PROFILE_IMAGE_NAME = "com.messengerhelloworld.helloworld.profileImageName";
 	private final Context context;
 	private final JSONArray localDataSet;
+	private Intent intentProfileImage;
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private final View contact;
@@ -53,6 +56,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 	public ContactsAdapter(Context context, JSONArray dataSet) {
 		this.context = context;
 		localDataSet = dataSet;
+		intentProfileImage = new Intent(this.context, ViewProfileImageActivity.class);
 	}
 
 	@Override
@@ -79,8 +83,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 			viewHolder.getUserName().setText(localDataSet.getJSONObject(position).getString("name"));
 
 			String profileImgName = localDataSet.getJSONObject(position).getString("profile_image");
-			if(!profileImgName.equals("null"))
+			if(!profileImgName.equals("null")) {
 				DisplayProfileImage.display((Activity) context, profileImgName, viewHolder.getProfileImg());
+				viewHolder.getProfileImg().setOnClickListener(v -> {
+					intentProfileImage.putExtra(PROFILE_IMAGE_NAME, profileImgName);
+					context.startActivity(intentProfileImage);
+				});
+			}
 
 		} catch (JSONException e) {
 			Log.e(TAG, e.toString());
